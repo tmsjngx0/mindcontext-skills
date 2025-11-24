@@ -1,0 +1,16 @@
+{
+  "name": "flowforge-skills",
+  "version": "0.1.0",
+  "description": "FlowForge project management skills for Claude Code - PRD creation, epic planning, task workflows, and intelligent scaffolding",
+  "author": "tmsjngx0",
+  "repository": "https://github.com/tmsjngx0/flowforge-skills",
+  "license": "MIT",
+  "keywords": [
+    "flowforge",
+    "project-management",
+    "prd",
+    "epic",
+    "task",
+    "workflow"
+  ]
+}
