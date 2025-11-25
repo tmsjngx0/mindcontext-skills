@@ -35,12 +35,15 @@ cp -r flowforge-skills/skills/* ~/.claude/skills/
 
 ### Verifying Installation
 
-After installation, check available skills:
+After installation, skills are automatically available. Try triggering one:
 ```
-/skills
+"Initialize FlowForge in this project"
 ```
 
-You should see FlowForge skills listed (prd-create, epic-planning, task-workflow, etc.)
+Or ask Claude what skills are available:
+```
+"What FlowForge skills do I have?"
+```
 
 ## Available Skills
 
