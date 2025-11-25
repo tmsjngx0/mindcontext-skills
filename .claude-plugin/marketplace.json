@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "flowforge-skills",
-      "source": ".",
+      "source": "./",
       "description": "FlowForge project management skills - PRD creation, epic planning, task workflows, and intelligent scaffolding"
     }
   ]
