@@ -8,19 +8,37 @@ FlowForge brings structured project management to Claude Code through natural la
 
 ## Installation
 
-### Option 1: Claude Marketplace (Recommended)
+### Option 1: From Marketplace (Recommended)
 
-**From GitHub (remote):**
+**Step 1: Add the marketplace**
 ```
-/plugin install github:tmsjngx0/flowforge-skills
-```
-
-**From local path:**
-```
-/plugin install /path/to/flowforge-skills
+/plugin marketplace add tmsjngx0/flowforge-skills
 ```
 
-### Option 2: Manual Installation
+**Step 2: Install the plugin**
+```
+/plugin install flowforge-skills@tmsjngx0
+```
+
+Or use the interactive browser:
+```
+/plugin
+```
+Then select "Browse Plugins" and find flowforge-skills.
+
+### Option 2: From Local Path
+
+For local development or testing:
+```
+/plugin marketplace add ./flowforge-skills
+```
+
+Then install:
+```
+/plugin install flowforge-skills@local
+```
+
+### Option 3: Manual Installation
 
 **Project-level (single project):**
 ```bash
@@ -43,6 +61,15 @@ After installation, skills are automatically available. Try triggering one:
 Or ask Claude what skills are available:
 ```
 "What FlowForge skills do I have?"
+```
+
+### Managing Plugins
+
+```
+/plugin                                    # Interactive plugin manager
+/plugin enable flowforge-skills@tmsjngx0  # Enable plugin
+/plugin disable flowforge-skills@tmsjngx0 # Disable plugin
+/plugin uninstall flowforge-skills@tmsjngx0 # Remove plugin
 ```
 
 ## Available Skills
@@ -178,7 +205,7 @@ FlowForge works out of the box. Optional customization in `CLAUDE.md`:
 
 **Marketplace plugin:**
 ```
-/plugin uninstall flowforge-skills
+/plugin uninstall flowforge-skills@tmsjngx0
 ```
 
 **Manual installation:**
