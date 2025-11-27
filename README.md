@@ -1,10 +1,15 @@
 # FlowForge Skills
 
-> Claude Code skills plugin for structured project management
+> Claude Code skills and agents plugin for structured project management with BMAD methodology
 
 ## Overview
 
-FlowForge brings structured project management to Claude Code through natural language. Simply describe what you want to do and Claude activates the appropriate skill.
+FlowForge brings structured project management to Claude Code through natural language. Simply describe what you want to do and Claude activates the appropriate skill or spawns specialized agents for complex operations.
+
+**What's Included:**
+- **19 Skills** - Natural language triggers for PM workflows
+- **4 Agents** - Specialized AI agents using BMAD methodology
+- **Entity Management** - Unified CRUD for PRDs, Epics, and Issues
 
 ## Installation
 
@@ -14,6 +19,8 @@ FlowForge brings structured project management to Claude Code through natural la
 ```
 /plugin marketplace add tmsjngx0/flowforge-skills
 ```
+
+This points Claude Code to the GitHub repository at `https://github.com/tmsjngx0/flowforge-skills` and registers it as a plugin marketplace.
 
 **Step 2: Install the plugin**
 ```
@@ -25,6 +32,11 @@ Or use the interactive browser:
 /plugin
 ```
 Then select "Browse Plugins" and find flowforge-skills.
+
+**Quick one-liner:**
+```
+/plugin marketplace add tmsjngx0/flowforge-skills && /plugin install flowforge-skills@tmsjngx0
+```
 
 ### Option 2: From Local Path
 
@@ -106,6 +118,56 @@ Or ask Claude what skills are available:
 |-------|----------|-------------|
 | `merge-workflow` | "merge X into Y", "combine branches" | Branch merge with conflict resolution |
 
+### Entity Management
+| Skill | Triggers | Description |
+|-------|----------|-------------|
+| `entity-manage` | "create/edit/show/list/close prd/epic/issue" | Unified CRUD with intelligent agent routing |
+
+## Available Agents
+
+FlowForge includes specialized agents using BMAD (Business Model Amplification through Design) methodology:
+
+| Agent | Purpose | Model | Used By |
+|-------|---------|-------|---------|
+| `pm-agent` | Strategic discovery and PRD creation | sonnet | `create prd` |
+| `architect-agent` | Technical design and epic creation | sonnet | `create epic` |
+| `developer-agent` | Implementation planning and coding | sonnet | `create issue`, `sync` |
+| `qa-agent` | Quality validation and testing | sonnet | Code review, testing |
+
+### How Agents Work
+
+Skills automatically route to appropriate agents based on the operation:
+
+```
+"create prd user-auth"
+  → Spawns pm-agent (sonnet)
+  → Strategic questioning
+  → Creates .project/prds/user-auth.md
+
+"create epic user-auth"
+  → Spawns architect-agent (sonnet)
+  → Reads PRD, designs architecture
+  → Creates .project/epics/user-auth/epic.md
+
+"show prd user-auth"
+  → Handled inline (haiku)
+  → Fast read and display
+```
+
+### Agent Routing Matrix
+
+| Operation | Agent | Model | Reason |
+|-----------|-------|-------|--------|
+| `create` (prd) | pm-agent | sonnet | Strategic discovery |
+| `create` (epic) | architect-agent | sonnet | Technical decomposition |
+| `create` (issue) | developer-agent | sonnet | Implementation planning |
+| `edit` | inline | haiku | Simple modification |
+| `show` | inline | haiku | Read and display |
+| `list` | inline | haiku | Directory listing |
+| `close` | inline | haiku | Status update |
+| `sync` | developer-agent | sonnet | GitHub integration |
+| `status` | inline | haiku | Quick status check |
+
 ## Project Structure
 
 FlowForge uses this standard structure:
@@ -168,6 +230,16 @@ your-project/
 ```
 "Migrate this project to FlowForge"
 "Convert existing PM structure"
+```
+
+**Entity Management (NEW):**
+```
+"create prd user-auth"
+"show epic payments"
+"list issues in auth-epic"
+"close issue 3"
+"sync epic to github"
+"prd status"
 ```
 
 ## Migrating Existing Projects
