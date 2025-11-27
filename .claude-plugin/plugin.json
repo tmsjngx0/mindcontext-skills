@@ -18,5 +18,10 @@
     "agents"
   ],
   "skills": "./skills",
-  "agents": "./agents"
+  "agents": [
+    "./agents/pm-agent.md",
+    "./agents/architect-agent.md",
+    "./agents/developer-agent.md",
+    "./agents/qa-agent.md"
+  ]
 }
