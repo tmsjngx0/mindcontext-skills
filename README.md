@@ -7,7 +7,7 @@
 FlowForge brings structured project management to Claude Code through natural language. Simply describe what you want to do and Claude activates the appropriate skill or spawns specialized agents for complex operations.
 
 **What's Included:**
-- **20 Skills** - Natural language triggers for PM workflows
+- **21 Skills** - Natural language triggers for PM workflows
 - **4 Agents** - Specialized AI agents using BMAD methodology
 - **Entity Management** - Unified CRUD for PRDs, Epics, and Issues
 - **Serena Integration** - Intelligent code analysis for agents
@@ -114,9 +114,10 @@ Or ask Claude what skills are available:
 | `task-workflow` | "work on task X", "implement task" | Complete task lifecycle with quality gates |
 | `tdd-workflow` | "tdd", "test first" | Test-driven development workflow |
 
-### Git & Merging
+### Git & Version Control
 | Skill | Triggers | Description |
 |-------|----------|-------------|
+| `smart-commit` | "commit", "smart commit", "save work" | Intelligent commit across submodules, worktrees, and parent repo |
 | `merge-workflow` | "merge X into Y", "combine branches" | Branch merge with conflict resolution |
 
 ### Entity Management
@@ -245,8 +246,10 @@ your-project/
 
 **Git operations:**
 ```
+"Commit"
+"Smart commit"
+"Save my work"
 "Merge feature branch into main"
-"Combine test/0.69 with test/0.610"
 ```
 
 **Migration:**
