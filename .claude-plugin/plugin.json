@@ -17,6 +17,7 @@
     "bmad",
     "agents"
   ],
+  "commands": "./commands",
   "skills": "./skills",
   "agents": [
     "./agents/pm-agent.md",
