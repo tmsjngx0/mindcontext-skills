@@ -9,6 +9,7 @@ MindContext brings structured project management to Claude Code through natural 
 **What's Included:**
 - **21 Skills** - Natural language triggers for PM workflows
 - **4 Agents** - Specialized AI agents using BMAD methodology
+- **Shadow Engineering** - Separate AI orchestration from production code
 - **Entity Management** - Unified CRUD for PRDs, Epics, and Issues
 - **Serena Integration** - Intelligent code analysis for agents
 
@@ -18,14 +19,14 @@ MindContext brings structured project management to Claude Code through natural 
 
 **Step 1: Add the marketplace**
 ```
-/plugin marketplace add tmsjngx0/mindcontext-skills
+/plugin marketplace add byteforgeca/mindcontext-skills
 ```
 
-This points Claude Code to the GitHub repository at `https://github.com/tmsjngx0/mindcontext-skills` and registers it as a plugin marketplace.
+This points Claude Code to the GitHub repository at `https://github.com/byteforgeca/mindcontext-skills` and registers it as a plugin marketplace.
 
 **Step 2: Install the plugin**
 ```
-/plugin install mindcontext-skills@tmsjngx0
+/plugin install mindcontext-skills@byteforgeca
 ```
 
 Or use the interactive browser:
@@ -36,7 +37,7 @@ Then select "Browse Plugins" and find mindcontext-skills.
 
 **Quick one-liner:**
 ```
-/plugin marketplace add tmsjngx0/mindcontext-skills && /plugin install mindcontext-skills@tmsjngx0
+/plugin marketplace add byteforgeca/mindcontext-skills && /plugin install mindcontext-skills@byteforgeca
 ```
 
 ### Option 2: From Local Path
@@ -80,9 +81,9 @@ Or ask Claude what skills are available:
 
 ```
 /plugin                                    # Interactive plugin manager
-/plugin enable mindcontext-skills@tmsjngx0  # Enable plugin
-/plugin disable mindcontext-skills@tmsjngx0 # Disable plugin
-/plugin uninstall mindcontext-skills@tmsjngx0 # Remove plugin
+/plugin enable mindcontext-skills@byteforgeca  # Enable plugin
+/plugin disable mindcontext-skills@byteforgeca # Disable plugin
+/plugin uninstall mindcontext-skills@byteforgeca # Remove plugin
 ```
 
 ## Available Skills
@@ -215,6 +216,38 @@ your-project/
 └── README.md
 ```
 
+## Shadow Engineering
+
+**Shadow Engineering** is a development pattern that separates AI orchestration (messy, iterative) from production code (clean, professional):
+
+```
+Shadow (Parent Repo)           →    Light (Submodule)
+project-mgmt/                        actual-project/
+├── .project/                        ├── src/
+│   ├── prds/                        ├── tests/
+│   ├── epics/                       ├── package.json
+│   └── context/                     └── Clean git history
+├── .claude/
+├── prompts/
+├── docs/
+└── actual-project/ (submodule)
+```
+
+**Why Shadow Engineering?**
+
+✅ **Clean Git History** - No AI artifacts in production repo
+✅ **Separation of Concerns** - Orchestration vs. implementation
+✅ **Contribution-Ready** - Submodule looks like normal development
+✅ **Context Isolation** - Keep AI context separate from code
+✅ **Professional Output** - Ship clean code, not AI experiments
+
+**Setup:**
+```
+"Initialize Shadow Engineering"
+```
+
+This creates the parent/submodule structure for clean development. See [shadow-setup skill](skills/shadow-setup/SKILL.md) for details.
+
 ## Natural Language Examples
 
 **Starting your day:**
@@ -303,7 +336,7 @@ MindContext works out of the box. Optional customization in `CLAUDE.md`:
 
 **Marketplace plugin:**
 ```
-/plugin uninstall mindcontext-skills@tmsjngx0
+/plugin uninstall mindcontext-skills@byteforgeca
 ```
 
 **Manual installation:**
@@ -315,7 +348,7 @@ rm -rf ~/.claude/skills/mindcontext-*  # personal
 
 ## Contributing
 
-Issues and PRs welcome at: https://github.com/tmsjngx0/mindcontext-skills
+Issues and PRs welcome at: https://github.com/byteforgeca/mindcontext-skills
 
 ## License
 
