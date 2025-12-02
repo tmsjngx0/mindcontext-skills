@@ -23,7 +23,7 @@ The skill detects and handles these change types:
 | **Submodule** | `mindcontext-skills/` or other submodules | Commit in submodule first, then update parent reference |
 | **PRD/Epic** | `.project/prds/`, `.project/epics/` | Group related PM changes |
 | **Context** | `.project/context/` | Commit as documentation update |
-| **Management** | `legacy-structure/`, `docs/`, `scripts/` | Commit as chore/docs |
+| **Management** | `docs/`, `scripts/` | Commit as chore/docs |
 | **Config** | `.claude/`, `CLAUDE.md` | Commit as config update |
 | **Worktree** | Separate worktree paths | Commit in worktree context |
 | **Code** | `src/`, `lib/`, etc. | Standard feature/fix commits |
@@ -199,7 +199,7 @@ git add .project/context/
 git commit -m "docs: Update project context"
 
 # Group 3: Management changes
-git add docs/ scripts/ legacy-structure/
+git add docs/ scripts/
 git commit -m "chore: {description}"
 
 # Group 4: Config changes

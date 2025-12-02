@@ -16,11 +16,11 @@ Unified CRUD operations for project management entities with intelligent agent r
 
 ## Supported Entities
 
-| Entity | Path (MindContext) | Path (Legacy) |
-|--------|------------------|---------------|
-| PRD | `.project/prds/[name].md` | `legacy-structure/prds/[name].md` |
-| Epic | `.project/epics/[name]/epic.md` | `legacy-structure/epics/[name]/epic.md` |
-| Issue | `.project/epics/[epic]/[number].md` | `legacy-structure/epics/[epic]/[number].md` |
+| Entity | Path |
+|--------|------|
+| PRD | `.project/prds/[name].md` |
+| Epic | `.project/epics/[name]/epic.md` |
+| Issue | `.project/epics/[epic]/[number].md` |
 
 ## Supported Operations
 
@@ -79,25 +79,22 @@ Input: "list epics"
 
 ### Phase 2: Resolve Paths
 
-Detect which path structure exists:
+Check for MindContext structure:
 
 ```bash
 # Check for MindContext structure
 if [ -d ".project" ]; then
     BASE_PATH=".project"
-# Check for legacy structure
-elif [ -d "legacy-structure" ]; then
-    BASE_PATH="legacy-structure"
 else
-    echo "No project structure found. Run 'initialize project' first."
+    echo "No .project/ structure found. Run 'initialize project' first."
     exit 1
 fi
 ```
 
 **Path Resolution:**
 ```
-PRD:   $BASE_PATH/prds/[name].md
-Epic:  $BASE_PATH/epics/[name]/epic.md
+PRD:   .project/prds/[name].md
+Epic:  .project/epics/[name]/epic.md
 Issue: $BASE_PATH/epics/[epic-name]/[number].md
 ```
 
@@ -487,7 +484,7 @@ Completed: [count]
 
 ## Notes
 
-- Supports both `.project/` (MindContext) and `legacy-structure/` (legacy) paths
+- Uses `.project/` structure (MindContext standard)
 - Agent-routed operations use sonnet model for quality
 - Simple operations use haiku model for speed
 - Issue numbers auto-normalize to 3-digit format
