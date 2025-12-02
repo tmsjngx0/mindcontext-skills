@@ -90,6 +90,11 @@ Create `CLAUDE.md` in project root with:
 
 ## Code Style
 Follow existing patterns in the codebase.
+
+## Git Commits
+- Do NOT include AI attribution in commit messages
+- No "Generated with Claude Code" or "Co-Authored-By: Claude" footers
+- Keep commit messages clean and professional
 ```
 
 ### 6. GitHub Labels (Optional)
