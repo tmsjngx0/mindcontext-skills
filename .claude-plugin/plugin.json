@@ -1,21 +1,25 @@
 {
-  "name": "flowforge-skills",
-  "version": "1.4.0",
-  "description": "FlowForge project management skills and agents for Claude Code - PRD creation, epic planning, task workflows, and intelligent scaffolding with BMAD methodology",
+  "name": "mindcontext-skills",
+  "version": "2.0.0",
+  "description": "MindContext Skills - The thinking layer for AI-assisted engineering. Shadow Engineering, BMAD methodology, and 21+ skills for structured development.",
   "author": {
-    "name": "tmsjngx0"
+    "name": "tmsjngx0",
+    "url": "https://mindcontext.io"
   },
-  "repository": "https://github.com/tmsjngx0/flowforge-skills",
+  "repository": "https://github.com/tmsjngx0/mindcontext-skills",
+  "homepage": "https://mindcontext.io",
   "license": "MIT",
   "keywords": [
-    "flowforge",
+    "mindcontext",
+    "shadow-engineering",
     "project-management",
     "prd",
     "epic",
     "task",
     "workflow",
     "bmad",
-    "agents"
+    "agents",
+    "structured-development"
   ],
   "commands": "./commands",
   "skills": "./skills",
