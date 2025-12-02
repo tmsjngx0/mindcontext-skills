@@ -1,4 +1,4 @@
-# FlowForge Skills Testing
+# MindContext Skills Testing
 
 ## Quick Test
 
@@ -21,7 +21,7 @@ claude  # or open in VS Code
 
 | Skill | Trigger | Expected |
 |-------|---------|----------|
-| project-scaffold | "Initialize FlowForge" | Creates .project/ |
+| project-scaffold | "Initialize MindContext" | Creates .project/ |
 | session-init | "Start session" | Shows status |
 | prd-create | "Create PRD for login" | Creates .project/prds/login.md |
 | epic-planning | "Plan login epic" | Creates tasks in epic dir |
@@ -49,7 +49,7 @@ sample-project/
 
 ### 1. Fresh Project
 - Create empty dir
-- "Initialize FlowForge"
+- "Initialize MindContext"
 - Verify structure created
 
 ### 2. Existing Project

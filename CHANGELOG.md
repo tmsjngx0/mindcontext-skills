@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to FlowForge Skills will be documented in this file.
+All notable changes to MindContext Skills will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -23,8 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Core Skills (12 total)**
-  - `project-scaffold` - Initialize FlowForge project structure
-  - `project-migrate` - Migrate existing PM files to FlowForge
+  - `project-scaffold` - Initialize MindContext project structure
+  - `project-migrate` - Migrate existing PM files to MindContext
   - `start-of-day` - Session initialization with repo sync
   - `prime-context` - Load project context files
   - `session-init` - Initialize work session

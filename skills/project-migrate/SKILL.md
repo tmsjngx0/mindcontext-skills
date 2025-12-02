@@ -1,24 +1,24 @@
 ---
 name: project-migrate
-description: Migrate existing project management files to FlowForge structure. Use when user says "migrate project", "convert to flowforge", "cleanup pm structure", or has existing legacy-structure/custom PM files.
+description: Migrate existing project management files to MindContext structure. Use when user says "migrate project", "convert to mindcontext", "cleanup pm structure", or has existing legacy-structure/custom PM files.
 ---
 
 # Project Migrate
 
-Migrate existing project management structures to FlowForge's standard layout, identifying duplicates and organizing context documents.
+Migrate existing project management structures to MindContext's standard layout, identifying duplicates and organizing context documents.
 
 ## When to Use
 
 - Project has existing PM files (legacy-structure/, .project/, custom structure)
-- User says "migrate to flowforge", "convert project", "cleanup structure"
-- Existing `.claude/commands/` or `.claude/skills/` that overlap with FlowForge
+- User says "migrate to mindcontext", "convert project", "cleanup structure"
+- Existing `.claude/commands/` or `.claude/skills/` that overlap with MindContext
 - Context files scattered in various locations
 - Moving from another PM system
 
 ## What It Does
 
 1. **Scan** - Find existing PM structures and files
-2. **Analyze** - Identify what exists and what overlaps with FlowForge
+2. **Analyze** - Identify what exists and what overlaps with MindContext
 3. **Plan** - Create migration plan with user approval
 4. **Migrate** - Move/reorganize files to standard structure
 5. **Cleanup** - Remove duplicates, archive old files
@@ -85,11 +85,11 @@ Files Identified:
 
 ### Phase 2: Analysis
 
-**Step 2.1: Check for FlowForge Overlaps**
+**Step 2.1: Check for MindContext Overlaps**
 
-Compare existing commands/skills with FlowForge:
+Compare existing commands/skills with MindContext:
 
-| FlowForge Skill | Existing Equivalent | Action |
+| MindContext Skill | Existing Equivalent | Action |
 |-----------------|---------------------|--------|
 | prd-create | /pm:prd-new | Replace |
 | epic-planning | /pm:epic-decompose | Replace |
@@ -108,7 +108,7 @@ To Migrate (move to .project/):
   - legacy-structure/prds/* → .project/prds/
   - docs/context/*.md → .project/context/
 
-To Remove (replaced by FlowForge):
+To Remove (replaced by MindContext):
   - .claude/commands/pm/*.md (X files)
   - .claude/skills/legacy-structure-*/ (X skills)
 
@@ -155,7 +155,7 @@ Phase B: Migrate Content
      - [X more files]
 
 Phase C: Remove Superseded Directories
-  Remove (FlowForge plugin provides these):
+  Remove (MindContext plugin provides these):
     - .claude/agents/        (plugin provides agents)
     - .claude/commands/      (plugin provides commands)
     - .claude/skills/        (plugin provides skills)
@@ -202,7 +202,7 @@ If user wants changes:
 **Step 4.1: Create Target Structure**
 
 ```bash
-# Create FlowForge structure
+# Create MindContext structure
 mkdir -p .project/prds
 mkdir -p .project/epics
 mkdir -p .project/context
@@ -231,15 +231,15 @@ Update paths in migrated files:
 - `legacy-structure/context/` → `.project/context/`
 - `legacy-structure/epics/` → `.project/epics/`
 
-**Step 4.4: Remove Superseded FlowForge Directories**
+**Step 4.4: Remove Superseded MindContext Directories**
 
-When FlowForge is installed as a plugin, local `.claude/` directories become superseded. Remove them to avoid conflicts:
+When MindContext is installed as a plugin, local `.claude/` directories become superseded. Remove them to avoid conflicts:
 
 ```bash
-# Remove superseded directories (FlowForge plugin handles these now)
-rm -rf .claude/agents/     # FlowForge plugin provides agents
-rm -rf .claude/commands/   # FlowForge plugin provides commands
-rm -rf .claude/skills/     # FlowForge plugin provides skills
+# Remove superseded directories (MindContext plugin handles these now)
+rm -rf .claude/agents/     # MindContext plugin provides agents
+rm -rf .claude/commands/   # MindContext plugin provides commands
+rm -rf .claude/skills/     # MindContext plugin provides skills
 rm -rf .claude/scripts/    # No longer needed with plugin system
 
 # Keep these (not superseded):
@@ -247,15 +247,15 @@ rm -rf .claude/scripts/    # No longer needed with plugin system
 # - CLAUDE.md               (Project-specific instructions)
 ```
 
-**Important:** Only remove these if FlowForge plugin is installed:
+**Important:** Only remove these if MindContext plugin is installed:
 ```bash
-# Verify FlowForge is installed first
-/plugin list | grep flowforge-skills
+# Verify MindContext is installed first
+/plugin list | grep mindcontext-skills
 ```
 
 If not installed, warn user:
 ```
-⚠️  FlowForge plugin not detected
+⚠️  MindContext plugin not detected
 
 These directories will be removed:
   - .claude/agents/
@@ -263,9 +263,9 @@ These directories will be removed:
   - .claude/skills/
   - .claude/scripts/
 
-To avoid losing functionality, install FlowForge first:
-  /plugin marketplace add tmsjngx0/flowforge-skills
-  /plugin install flowforge-skills@tmsjngx0
+To avoid losing functionality, install MindContext first:
+  /plugin marketplace add tmsjngx0/mindcontext-skills
+  /plugin install mindcontext-skills@tmsjngx0
 
 Then run migration again.
 
@@ -344,7 +344,7 @@ Search for old paths that need updating:
 grep -r "legacy-structure/" . --include="*.md" 2>/dev/null
 ```
 
-**Step 5.3: Verify FlowForge Skills Work**
+**Step 5.3: Verify MindContext Skills Work**
 
 ```
 Verification:
@@ -388,9 +388,9 @@ New Structure:
   └── CLAUDE.md (moved to root if not there)
 
 Removed Superseded Directories:
-  - .claude/agents/         (FlowForge plugin provides)
-  - .claude/commands/       (FlowForge plugin provides)
-  - .claude/skills/         (FlowForge plugin provides)
+  - .claude/agents/         (MindContext plugin provides)
+  - .claude/commands/       (MindContext plugin provides)
+  - .claude/skills/         (MindContext plugin provides)
   - .claude/scripts/        (no longer needed)
 
 Archive Location:
@@ -400,7 +400,7 @@ Archive Location:
   ├── .claude-commands/     (old commands)
   └── .claude-skills/       (old skills)
 
-FlowForge Skills Now Active:
+MindContext Skills Now Active:
   ✓ prd-create
   ✓ epic-planning
   ✓ task-workflow
@@ -410,7 +410,7 @@ FlowForge Skills Now Active:
 Next Steps:
   1. Review migrated files in .project/
   2. Update any custom references to old paths
-  3. Test FlowForge skills: "create prd for test"
+  3. Test MindContext skills: "create prd for test"
   4. Delete .archive/ when confident migration is complete
 ```
 
@@ -440,7 +440,7 @@ rm -rf .project/
 | `legacy-structure/context/` | `.project/context/` |
 
 ### Command → Skill Mappings
-| Old Command | FlowForge Skill |
+| Old Command | MindContext Skill |
 |-------------|-----------------|
 | `/pm:prd-new` | `prd-create` |
 | `/pm:epic-decompose` | `epic-planning` |
@@ -450,7 +450,7 @@ rm -rf .project/
 | `/ct:prime` | `prime-context` |
 
 ### Skill Replacements
-| Old Skill | FlowForge Skill |
+| Old Skill | MindContext Skill |
 |-----------|-----------------|
 | `legacy-structure-task` | `task-workflow` |
 | `legacy-structure-merge` | `merge-workflow` |

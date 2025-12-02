@@ -9,7 +9,7 @@ progress: 0
 # Epic: Sample Feature
 
 ## Overview
-Test epic for verifying FlowForge skills.
+Test epic for verifying MindContext skills.
 
 ## Technical Approach
 Simple file operations to verify skill execution.

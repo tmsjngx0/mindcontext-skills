@@ -18,7 +18,7 @@ mgmt-repo/                             actual-project/
 ├── CLAUDE.md                          ├── tests/
 ├── prompts/                           ├── package.json
 ├── .project/                          └── Clean git history
-├── flowforge-skills/
+├── mindcontext-skills/
 └── actual-project/ (submodule)
 ```
 
@@ -51,14 +51,14 @@ my-project-mgmt/
 │   ├── prompts/            # AI prompts
 │   ├── rules/              # Project rules
 │   └── settings.json       # Claude config
-├── .project/               # FlowForge structure
+├── .project/               # MindContext structure
 │   ├── prds/
 │   ├── epics/
 │   └── context/
 ├── prompts/                # Custom AI prompts
 ├── docs/                   # Planning docs
 ├── scripts/                # Build/deploy scripts
-├── flowforge-skills/       # Plugin (optional submodule)
+├── mindcontext-skills/       # Plugin (optional submodule)
 ├── my-project/             # Submodule (clean code)
 ├── CLAUDE.md               # AI instructions
 └── README.md               # Project overview
@@ -92,10 +92,10 @@ cd my-project-mgmt
 git init
 ```
 
-**Step 1.2: Initialize FlowForge**
+**Step 1.2: Initialize MindContext**
 
 ```
-"initialize FlowForge in this project"
+"initialize MindContext in this project"
 ```
 
 This creates `.project/` structure for project management.
@@ -159,7 +159,7 @@ The actual code lives in: `./my-project/` (submodule)
 
 ## Structure
 
-- `.project/` - FlowForge project management
+- `.project/` - MindContext project management
 - `./my-project/` - Clean production code (submodule)
 - `prompts/` - Custom AI prompts
 - `docs/` - Planning and architecture
@@ -277,8 +277,8 @@ mkdir my-project-mgmt
 cd my-project-mgmt
 git init
 
-# 2. Initialize FlowForge
-"initialize FlowForge"
+# 2. Initialize MindContext
+"initialize MindContext"
 
 # 3. Clone your existing project as submodule
 git submodule add https://github.com/user/my-project.git my-project
@@ -344,7 +344,7 @@ Clean, professional commits. AI orchestration hidden in parent.
 ### For Client Work
 
 **Your Workspace (Shadow):**
-- FlowForge project management
+- MindContext project management
 - AI experimentation
 - Architecture notes
 - Multiple approaches tried
@@ -460,9 +460,9 @@ A: Yes. The pattern is framework-agnostic.
 **Q: Can I make the parent public?**
 A: You can, but most people keep parent private (AI orchestration) and submodule public (production code).
 
-## Integration with FlowForge
+## Integration with MindContext
 
-Shadow Engineering + FlowForge = Powerful combination:
+Shadow Engineering + MindContext = Powerful combination:
 
 ```
 .project/prds/user-auth.md       → Planning
@@ -486,7 +486,7 @@ All planning stays in parent. Clean code goes to submodule.
 | Messy iteration | Professional commits |
 | Planning docs | Production ready |
 | Private workspace | Public/team repo |
-| FlowForge structure | Standard project |
+| MindContext structure | Standard project |
 
 **Result:** Professional output from AI-assisted development.
 

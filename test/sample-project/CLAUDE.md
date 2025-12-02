@@ -1,9 +1,9 @@
 # CLAUDE.md
 
 ## Project Overview
-Sample project for testing FlowForge skills.
+Sample project for testing MindContext skills.
 
-## FlowForge Structure
+## MindContext Structure
 - PRDs: `.project/prds/`
 - Epics: `.project/epics/`
 - Progress: `.project/context/progress.md`

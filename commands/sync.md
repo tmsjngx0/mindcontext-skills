@@ -4,13 +4,13 @@ description: Sync epic tasks to GitHub issues and vice versa
 
 # Sync to GitHub
 
-Synchronize FlowForge epic tasks with GitHub issues for integrated project management.
+Synchronize MindContext epic tasks with GitHub issues for integrated project management.
 
 Invoke the git-sync skill to:
 - Create GitHub issues from epic tasks
 - Update GitHub issues when tasks change
 - Pull GitHub issue status back to tasks
-- Maintain bidirectional sync between FlowForge and GitHub
+- Maintain bidirectional sync between MindContext and GitHub
 
 The skill will:
 1. Find all tasks in the specified epic

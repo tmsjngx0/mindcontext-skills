@@ -5,7 +5,7 @@ description: Sync epic tasks between .project/ structure and GitHub issues. Use 
 
 # Git Sync
 
-Synchronize FlowForge epic tasks with GitHub issues for integrated project management.
+Synchronize MindContext epic tasks with GitHub issues for integrated project management.
 
 ## When to Use
 
@@ -13,7 +13,7 @@ Synchronize FlowForge epic tasks with GitHub issues for integrated project manag
 - Need to create GitHub issues from epic tasks
 - Update existing GitHub issues from task changes
 - Pull GitHub issue status back to tasks
-- Bidirectional sync between FlowForge and GitHub
+- Bidirectional sync between MindContext and GitHub
 
 ## What It Does
 
@@ -110,7 +110,7 @@ gh issue edit {issue-number} \
 
 **Step 3.1: Map Task Status to GitHub**
 
-| FlowForge Status | GitHub State | GitHub Labels |
+| MindContext Status | GitHub State | GitHub Labels |
 |------------------|--------------|---------------|
 | `open` | open | - |
 | `in_progress` | open | `in-progress` |
@@ -175,7 +175,7 @@ TASK_SYNCED=$(grep synced_at .project/epics/{epic}/{task}.md | cut -d: -f2)
 # Get GitHub issue state
 STATE=$(gh issue view {issue-number} --json state -q .state)
 
-# Map to FlowForge status
+# Map to MindContext status
 if [ "$STATE" = "CLOSED" ]; then
   # Update task status to done
   sed -i 's/^status: .*/status: done/' .project/epics/{epic}/{task}.md

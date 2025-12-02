@@ -1,10 +1,10 @@
-# FlowForge Skills
+# MindContext Skills
 
 > Claude Code skills and agents plugin for structured project management with BMAD methodology
 
 ## Overview
 
-FlowForge brings structured project management to Claude Code through natural language. Simply describe what you want to do and Claude activates the appropriate skill or spawns specialized agents for complex operations.
+MindContext brings structured project management to Claude Code through natural language. Simply describe what you want to do and Claude activates the appropriate skill or spawns specialized agents for complex operations.
 
 **What's Included:**
 - **21 Skills** - Natural language triggers for PM workflows
@@ -18,37 +18,37 @@ FlowForge brings structured project management to Claude Code through natural la
 
 **Step 1: Add the marketplace**
 ```
-/plugin marketplace add tmsjngx0/flowforge-skills
+/plugin marketplace add tmsjngx0/mindcontext-skills
 ```
 
-This points Claude Code to the GitHub repository at `https://github.com/tmsjngx0/flowforge-skills` and registers it as a plugin marketplace.
+This points Claude Code to the GitHub repository at `https://github.com/tmsjngx0/mindcontext-skills` and registers it as a plugin marketplace.
 
 **Step 2: Install the plugin**
 ```
-/plugin install flowforge-skills@tmsjngx0
+/plugin install mindcontext-skills@tmsjngx0
 ```
 
 Or use the interactive browser:
 ```
 /plugin
 ```
-Then select "Browse Plugins" and find flowforge-skills.
+Then select "Browse Plugins" and find mindcontext-skills.
 
 **Quick one-liner:**
 ```
-/plugin marketplace add tmsjngx0/flowforge-skills && /plugin install flowforge-skills@tmsjngx0
+/plugin marketplace add tmsjngx0/mindcontext-skills && /plugin install mindcontext-skills@tmsjngx0
 ```
 
 ### Option 2: From Local Path
 
 For local development or testing:
 ```
-/plugin marketplace add ./flowforge-skills
+/plugin marketplace add ./mindcontext-skills
 ```
 
 Then install:
 ```
-/plugin install flowforge-skills@local
+/plugin install mindcontext-skills@local
 ```
 
 ### Option 3: Manual Installation
@@ -56,33 +56,33 @@ Then install:
 **Project-level (single project):**
 ```bash
 mkdir -p .claude/skills
-cp -r flowforge-skills/skills/* .claude/skills/
+cp -r mindcontext-skills/skills/* .claude/skills/
 ```
 
 **Personal (all projects):**
 ```bash
-cp -r flowforge-skills/skills/* ~/.claude/skills/
+cp -r mindcontext-skills/skills/* ~/.claude/skills/
 ```
 
 ### Verifying Installation
 
 After installation, skills are automatically available. Try triggering one:
 ```
-"Initialize FlowForge in this project"
+"Initialize MindContext in this project"
 ```
 
 Or ask Claude what skills are available:
 ```
-"What FlowForge skills do I have?"
+"What MindContext skills do I have?"
 ```
 
 ### Managing Plugins
 
 ```
 /plugin                                    # Interactive plugin manager
-/plugin enable flowforge-skills@tmsjngx0  # Enable plugin
-/plugin disable flowforge-skills@tmsjngx0 # Disable plugin
-/plugin uninstall flowforge-skills@tmsjngx0 # Remove plugin
+/plugin enable mindcontext-skills@tmsjngx0  # Enable plugin
+/plugin disable mindcontext-skills@tmsjngx0 # Disable plugin
+/plugin uninstall mindcontext-skills@tmsjngx0 # Remove plugin
 ```
 
 ## Available Skills
@@ -90,8 +90,8 @@ Or ask Claude what skills are available:
 ### Project Setup
 | Skill | Triggers | Description |
 |-------|----------|-------------|
-| `project-scaffold` | "initialize project", "set up flowforge" | Create `.project/` structure |
-| `project-migrate` | "migrate project", "convert to flowforge" | Migrate existing PM files to FlowForge |
+| `project-scaffold` | "initialize project", "set up mindcontext" | Create `.project/` structure |
+| `project-migrate` | "migrate project", "convert to mindcontext" | Migrate existing PM files to MindContext |
 
 ### Session Management
 | Skill | Triggers | Description |
@@ -132,7 +132,7 @@ Or ask Claude what skills are available:
 
 ## Available Agents
 
-FlowForge includes specialized agents using BMAD (Business Model Amplification through Design) methodology:
+MindContext includes specialized agents using BMAD (Business Model Amplification through Design) methodology:
 
 | Agent | Purpose | Model | Used By |
 |-------|---------|-------|---------|
@@ -194,7 +194,7 @@ This configures Serena MCP for efficient code analysis. Agents automatically use
 
 ## Project Structure
 
-FlowForge uses this standard structure:
+MindContext uses this standard structure:
 
 ```
 your-project/
@@ -254,7 +254,7 @@ your-project/
 
 **Migration:**
 ```
-"Migrate this project to FlowForge"
+"Migrate this project to MindContext"
 "Convert existing PM structure"
 ```
 
@@ -277,22 +277,22 @@ If you have an existing project with:
 
 Use the migration skill:
 ```
-"Migrate this project to FlowForge"
+"Migrate this project to MindContext"
 ```
 
 This will:
 1. Scan for existing PM structures
-2. Identify duplicates with FlowForge skills
+2. Identify duplicates with MindContext skills
 3. Move context files to `.project/context/`
 4. Reorganize PRDs and epics
 5. Create migration report
 
 ## Configuration
 
-FlowForge works out of the box. Optional customization in `CLAUDE.md`:
+MindContext works out of the box. Optional customization in `CLAUDE.md`:
 
 ```markdown
-## FlowForge Settings
+## MindContext Settings
 
 - PRD location: .project/prds/
 - Epic location: .project/epics/
@@ -303,19 +303,19 @@ FlowForge works out of the box. Optional customization in `CLAUDE.md`:
 
 **Marketplace plugin:**
 ```
-/plugin uninstall flowforge-skills@tmsjngx0
+/plugin uninstall mindcontext-skills@tmsjngx0
 ```
 
 **Manual installation:**
 ```bash
 rm -rf .claude/skills/  # project-level
 # or
-rm -rf ~/.claude/skills/flowforge-*  # personal
+rm -rf ~/.claude/skills/mindcontext-*  # personal
 ```
 
 ## Contributing
 
-Issues and PRs welcome at: https://github.com/tmsjngx0/flowforge-skills
+Issues and PRs welcome at: https://github.com/tmsjngx0/mindcontext-skills
 
 ## License
 

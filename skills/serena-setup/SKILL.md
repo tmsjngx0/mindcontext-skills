@@ -12,7 +12,7 @@ Install and configure the Serena MCP server for intelligent code analysis in the
 - Setting up a new project for development
 - User says "setup serena", "install serena", "configure serena"
 - User wants "code analysis", "symbol search", "intelligent editing"
-- FlowForge agents need Serena tools for efficient operation
+- MindContext agents need Serena tools for efficient operation
 
 ## What is Serena?
 
@@ -352,9 +352,9 @@ Solution:
 4. Find uvx path: where.exe uvx
 ```
 
-## Integration with FlowForge
+## Integration with MindContext
 
-Once Serena is configured, FlowForge agents automatically use Serena tools:
+Once Serena is configured, MindContext agents automatically use Serena tools:
 
 | Agent | Serena Tools Used |
 |-------|-------------------|
@@ -398,7 +398,7 @@ Next steps:
 1. Restart Claude Code to load MCP server
 2. Test with: "Use Serena to analyze src/"
 
-FlowForge agents now have enhanced code analysis!
+MindContext agents now have enhanced code analysis!
 ```
 
 ### Success (Manual Method)

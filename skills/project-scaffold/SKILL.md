@@ -1,17 +1,17 @@
 ---
 name: project-scaffold
-description: Initialize FlowForge project structure with .project/ directory, CLAUDE.md, and GitHub integration. Use when user says "initialize project", "set up flowforge", "scaffold project", or "create project structure".
+description: Initialize MindContext project structure with .project/ directory, CLAUDE.md, and GitHub integration. Use when user says "initialize project", "set up mindcontext", "scaffold project", or "create project structure".
 ---
 
 # Project Scaffold
 
-Initialize or migrate any project to use FlowForge methodology.
+Initialize or migrate any project to use MindContext methodology.
 
 ## When to Use
 
 - Setting up a new project
-- Adding FlowForge to existing project
-- User says "initialize project", "set up flowforge", "scaffold"
+- Adding MindContext to existing project
+- User says "initialize project", "set up mindcontext", "scaffold"
 
 ## Workflow
 
@@ -72,7 +72,7 @@ Create `CLAUDE.md` in project root with:
 ## Project Overview
 [Project description - ask user or detect from package.json/README]
 
-## FlowForge Structure
+## MindContext Structure
 - PRDs: `.project/prds/`
 - Epics: `.project/epics/`
 - Progress: `.project/context/progress.md`

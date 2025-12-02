@@ -20,7 +20,7 @@ The skill detects and handles these change types:
 
 | Category | Location | Commit Strategy |
 |----------|----------|-----------------|
-| **Submodule** | `flowforge-skills/` or other submodules | Commit in submodule first, then update parent reference |
+| **Submodule** | `mindcontext-skills/` or other submodules | Commit in submodule first, then update parent reference |
 | **PRD/Epic** | `.project/prds/`, `.project/epics/` | Group related PM changes |
 | **Context** | `.project/context/` | Commit as documentation update |
 | **Management** | `legacy-structure/`, `docs/`, `scripts/` | Commit as chore/docs |
@@ -70,7 +70,7 @@ CHANGE ANALYSIS
 ===============
 
 Submodule Changes:
-  flowforge-skills/
+  mindcontext-skills/
     M  skills/new-skill/SKILL.md
     A  agents/new-agent.md
 
@@ -151,7 +151,7 @@ refactor: {description}
 
 ```bash
 # Enter submodule
-cd flowforge-skills
+cd mindcontext-skills
 
 # Stage and commit
 git add -A
@@ -168,10 +168,10 @@ cd ..
 
 ```bash
 # Stage submodule pointer update
-git add flowforge-skills
+git add mindcontext-skills
 
 # Commit reference update
-git commit -m "chore: Update flowforge-skills submodule"
+git commit -m "chore: Update mindcontext-skills submodule"
 ```
 
 **Step 3.3: Commit Worktree Changes**
@@ -221,12 +221,12 @@ git push
 SMART COMMIT COMPLETE
 =====================
 
-Submodule: flowforge-skills
+Submodule: mindcontext-skills
   ✓ abc1234 feat: Add smart-commit skill
   ✓ Pushed to origin/main
 
-Parent: flowforge-mcp
-  ✓ def5678 chore: Update flowforge-skills submodule
+Parent: mindcontext-mcp
+  ✓ def5678 chore: Update mindcontext-skills submodule
   ✓ ghi9012 docs: Update project progress
   ✓ Pushed to origin/main
 
@@ -245,7 +245,7 @@ CHANGES DETECTED
 
 I found the following changes:
 
-1. Submodule (flowforge-skills):
+1. Submodule (mindcontext-skills):
    - New skill: smart-commit
    - Modified: entity-manage skill
 
@@ -271,7 +271,7 @@ NO CHANGES TO COMMIT
 
 Working directory is clean in:
   ✓ Parent repo
-  ✓ flowforge-skills submodule
+  ✓ mindcontext-skills submodule
   ✓ All worktrees
 
 Nothing to commit.
@@ -283,10 +283,10 @@ Nothing to commit.
 ⚠️ SUBMODULE HAS UNCOMMITTED CHANGES
 =====================================
 
-flowforge-skills has uncommitted changes that will be lost
+mindcontext-skills has uncommitted changes that will be lost
 if you only commit the parent reference.
 
-Changes in flowforge-skills:
+Changes in mindcontext-skills:
   M  skills/new-skill/SKILL.md
 
 Options:
@@ -355,7 +355,7 @@ User: "commit"
 **Specific commit:**
 ```
 User: "commit the new skill I just created"
-→ Detects new skill in flowforge-skills
+→ Detects new skill in mindcontext-skills
 → Commits: "feat: Add {skill-name} skill"
 → Updates parent submodule reference
 → Pushes both

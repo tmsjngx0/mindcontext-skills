@@ -7,7 +7,7 @@ created: 2025-11-23T00:00:00Z
 # PRD: Sample Feature
 
 ## Executive Summary
-A sample feature for testing FlowForge skills.
+A sample feature for testing MindContext skills.
 
 ## Problem Statement
 Need to test that skills work correctly.

@@ -16,7 +16,7 @@ Unified CRUD operations for project management entities with intelligent agent r
 
 ## Supported Entities
 
-| Entity | Path (FlowForge) | Path (Legacy) |
+| Entity | Path (MindContext) | Path (Legacy) |
 |--------|------------------|---------------|
 | PRD | `.project/prds/[name].md` | `legacy-structure/prds/[name].md` |
 | Epic | `.project/epics/[name]/epic.md` | `legacy-structure/epics/[name]/epic.md` |
@@ -82,7 +82,7 @@ Input: "list epics"
 Detect which path structure exists:
 
 ```bash
-# Check for FlowForge structure
+# Check for MindContext structure
 if [ -d ".project" ]; then
     BASE_PATH=".project"
 # Check for legacy structure
@@ -487,7 +487,7 @@ Completed: [count]
 
 ## Notes
 
-- Supports both `.project/` (FlowForge) and `legacy-structure/` (legacy) paths
+- Supports both `.project/` (MindContext) and `legacy-structure/` (legacy) paths
 - Agent-routed operations use sonnet model for quality
 - Simple operations use haiku model for speed
 - Issue numbers auto-normalize to 3-digit format
