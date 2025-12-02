@@ -1,10 +1,12 @@
 # MindContext Skills
 
-**The thinking layer for AI-assisted engineering.**
+**Claude Code plugin for structured AI-assisted engineering.**
 
 > From vibe code to production code.
 
 ## What is MindContext?
+
+A **Claude Code plugin** that brings structured software engineering to AI-assisted development.
 
 You built something with AI. That's awesome! But now you need to add features, fix bugs, or work with a team—and things get messy fast.
 
