@@ -144,6 +144,8 @@ All commands use natural language—just describe what you need.
 ### Task Execution
 | Skill | Triggers | Description |
 |-------|----------|-------------|
+| `next-task` | "next task", "what's next", "give me a task" | Find next available task by priority and dependencies |
+| `next-job` | "next job", "what's next job", "give me next job" | Alias for next-task (same functionality) |
 | `task-start` | "start task X", "begin task" | Start specific task with analysis |
 | `task-workflow` | "work on task X", "implement task" | Complete task lifecycle with quality gates |
 | `tdd-workflow` | "tdd", "test first" | Test-driven development workflow |
