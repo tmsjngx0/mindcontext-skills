@@ -100,7 +100,7 @@ If `gh` CLI is available and authenticated, create labels:
 Show user:
 
 ```
-FLOWFORGE INITIALIZED
+MINDCONTEXT INITIALIZED
 
 Created:
   .project/prds/

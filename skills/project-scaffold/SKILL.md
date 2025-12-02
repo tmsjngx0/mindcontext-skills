@@ -7,11 +7,14 @@ description: Initialize MindContext project structure with .project/ directory, 
 
 Initialize or migrate any project to use MindContext methodology.
 
+**Note:** This creates the `.project/` structure in a single repository. If you need Shadow Engineering (parent + submodule pattern), use the `shadow-setup` skill instead, which calls this skill and then adds the submodule structure.
+
 ## When to Use
 
-- Setting up a new project
+- Setting up a new project (single repo)
 - Adding MindContext to existing project
 - User says "initialize project", "set up mindcontext", "scaffold"
+- **For Shadow Engineering:** Use `shadow-setup` skill instead
 
 ## Workflow
 
@@ -100,7 +103,7 @@ If `gh` CLI is available and authenticated, create labels:
 Show user:
 
 ```
-FLOWFORGE INITIALIZED
+MINDCONTEXT INITIALIZED
 
 Created:
   .project/prds/

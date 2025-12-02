@@ -7,6 +7,8 @@ description: Initialize Shadow Engineering structure - AI orchestration in paren
 
 Initialize the Shadow Engineering pattern: AI orchestration in parent repo, clean production code in submodule.
 
+**Note:** This skill automatically runs `project-scaffold` to initialize `.project/` in the parent repo, then adds the submodule pattern for clean code separation.
+
 ## What is Shadow Engineering?
 
 **Shadow Engineering** is a development pattern that separates AI orchestration (messy, iterative) from production code (clean, maintainable):
