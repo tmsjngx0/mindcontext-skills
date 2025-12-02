@@ -266,11 +266,11 @@ project-mgmt/                        actual-project/
 
 **Why this matters:**
 
-✅ **Your git history looks professional** - No "fixing AI's mistakes" commits
-✅ **Teams can review your code** - No random AI comments to explain
-✅ **You can contribute anywhere** - Your code looks like any other repo
-✅ **Context stays organized** - All the messy iteration lives in one place
-✅ **Ship with confidence** - Production code is clean and maintainable
+- ✅ **Your git history looks professional** - No "fixing AI's mistakes" commits
+- ✅ **Teams can review your code** - No random AI comments to explain
+- ✅ **You can contribute anywhere** - Your code looks like any other repo
+- ✅ **Context stays organized** - All the messy iteration lives in one place
+- ✅ **Ship with confidence** - Production code is clean and maintainable
 
 **Real scenario:**
 - You: "Hey Claude, add user authentication"
