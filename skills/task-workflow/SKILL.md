@@ -7,7 +7,7 @@ description: Execute complete task lifecycle from analysis through implementatio
 
 Execute complete task lifecycle with developer-agent orchestration.
 
-Invoke developer-agent in implementation mode with task context to execute the full workflow:
+When main Claude agent spawns developer-agent for this task, the developer-agent should execute the full workflow:
 
 1. **Load task** - Read task file from `.project/epics/{epic}/{number}.md`
 2. **Analyze** - Understand requirements and existing patterns

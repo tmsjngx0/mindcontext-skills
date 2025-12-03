@@ -7,7 +7,7 @@ description: Test-Driven Development workflow - write failing tests first, then 
 
 Execute Test-Driven Development with the Red-Green-Refactor cycle.
 
-Invoke developer-agent in TDD mode to implement features test-first:
+When main Claude agent spawns developer-agent for this task, the developer-agent should implement features test-first:
 
 ## The TDD Cycle
 

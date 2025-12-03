@@ -1,11 +1,11 @@
 ---
 name: epic-start
-description: Begin work on an epic by creating branch, analyzing ready tasks, and launching parallel agents. Use when user says "start epic", "begin epic", "work on epic", or "launch epic".
+description: Begin work on an epic by creating branch and analyzing ready tasks. Use when user says "start epic", "begin epic", "work on epic", or "launch epic".
 ---
 
 # Epic Start
 
-Launch work on an epic by creating the branch, identifying ready tasks, and optionally launching parallel agents.
+Start work on an epic by creating the branch, identifying ready tasks, and preparing for implementation.
 
 ## When to Use
 
@@ -123,20 +123,20 @@ Starting task #001: [Title]
 Use "work on task 001" to begin implementation
 ```
 
-**Option B: Parallel (Multiple Agents)**
+**Option B: Parallel (Multiple Tasks)**
 
-For parallel execution, launch agents for ready tasks:
+For parallel execution, main Claude agent can spawn developer-agents for ready tasks:
 
 ```
-🚀 Launching Parallel Work
+🚀 Ready for Parallel Work
 
 Task #001: [Title]
-  → Agent started
+  → Ready to start
 
 Task #002: [Title]
-  → Agent started
+  → Ready to start
 
-Monitor progress with task status updates.
+Main agent will spawn developer-agents for each task as requested.
 ```
 
 ### Phase 5: Setup Tracking

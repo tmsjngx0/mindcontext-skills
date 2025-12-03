@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 2025-12-03
+
+### Fixed
+- **Skill wording clarity** - Corrected language in 4 skills to clarify that main Claude agent spawns subagents, not the skills themselves
+  - `task-workflow` - Changed "Invoke developer-agent" to "When main Claude agent spawns developer-agent"
+  - `tdd-workflow` - Changed "Invoke developer-agent" to "When main Claude agent spawns developer-agent"
+  - `task-start` - Changed "Invoke developer-agent" to "When main Claude agent spawns developer-agent"
+  - `epic-start` - Removed "launching parallel agents" language, clarified main agent spawns developer-agents
+
 ## [2.1.0] - 2025-12-02
 
 ### Added

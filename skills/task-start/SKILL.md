@@ -7,7 +7,7 @@ description: Begin work on a specific task with analysis and parallel stream sup
 
 Begin work on a specific task with developer-agent analysis and setup.
 
-Invoke developer-agent in task-start mode to prepare the task for implementation:
+When main Claude agent spawns developer-agent for this task, the developer-agent should prepare the task for implementation:
 
 1. **Find task** - Locate task file in `.project/epics/*/{number}.md`
 2. **Load context** - Read task, epic, and dependencies
