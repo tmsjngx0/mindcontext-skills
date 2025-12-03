@@ -150,7 +150,6 @@ All commands use natural language—just describe what you need.
 | `next-job` | "next job", "what's next job", "give me next job" | Alias for next-task (same functionality) |
 | `task-start` | "start task X", "begin task" | Start specific task with analysis |
 | `task-workflow` | "work on task X", "implement task" | Complete task lifecycle with quality gates |
-| `tdd-workflow` | "tdd", "test first" | Test-driven development workflow |
 
 ### Git & Version Control
 | Skill | Triggers | Description |
@@ -338,7 +337,7 @@ MindContext includes **10 workflow-focused commands** for common operations:
 ```
 "Work on task 3"
 "Start task 001"
-"Use TDD for this feature"
+"What's next?"
 ```
 
 **Git operations:**
@@ -417,6 +416,154 @@ rm -rf .claude/skills/  # project-level
 # or
 rm -rf ~/.claude/skills/mindcontext-*  # personal
 ```
+
+## Plugin Ecosystem
+
+MindContext is designed to complement other Claude Code plugins, not replace them. Here's how it fits into your toolkit:
+
+### MindContext's Role: The Strategy Layer
+
+MindContext focuses on **business context, planning, and project management**:
+
+- ✅ PRD creation with business requirements
+- ✅ Epic architecture and technical design
+- ✅ Task decomposition with dependencies
+- ✅ Session management (start-of-day, end-of-day)
+- ✅ State tracking (focus.json, progress tracking)
+- ✅ External LLM review workflow
+- ✅ Shadow Engineering project structure
+
+**What MindContext doesn't do:** TDD enforcement, granular micro-tasks, or deep codebase exploration.
+
+### Recommended Plugin Combinations
+
+#### MindContext + superpowers (obra)
+
+**superpowers** provides TDD-first execution with ultra-granular tasks (2-5 minutes each):
+
+```
+MindContext: PRD → Epic → Tasks (strategic planning)
+superpowers: Tasks → Micro-steps with TDD enforcement (tactical execution)
+```
+
+**Why together:**
+- MindContext: Business → Technical translation
+- superpowers: Enforced test-first, granular progress, parallel worktrees
+- Zero conflict: MindContext removed tdd-workflow in v2.3.0
+
+**Example workflow:**
+```bash
+# Strategic planning (MindContext)
+You: "create prd for user auth"
+You: "create epic user-auth"
+You: "plan epic user-auth"
+
+# Tactical execution (superpowers)
+You: "implement task 001 with TDD"  # superpowers enforces test-first with micro-steps
+```
+
+#### MindContext + feature-dev (Anthropic Official)
+
+**feature-dev** provides 7-phase structured development workflow:
+
+```
+MindContext: Business context + Architecture
+feature-dev: Exploration → Implementation → Testing → Review → Documentation
+```
+
+**Why together:**
+- MindContext: PRD business context, architectural decisions
+- feature-dev: Deep codebase exploration with parallel agents, phased workflow
+- Minimal overlap: MindContext = documentation layer, feature-dev = code exploration
+
+**Example workflow:**
+```bash
+# Business context (MindContext)
+You: "create prd for refactor auth"
+You: "create epic auth-refactor"
+
+# Feature implementation (feature-dev)
+You: "implement auth refactor"  # 7-phase workflow with exploration agents
+```
+
+#### All Three Together
+
+For complex projects, use all three:
+
+```
+┌─────────────────────────────────────────────────┐
+│ MindContext: Strategy Layer                     │
+│ - PRDs with business context                    │
+│ - Epics with architecture                       │
+│ - Task dependencies                             │
+│ - Session management                            │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ feature-dev: Analysis Layer                     │
+│ - Codebase exploration                          │
+│ - 7-phase workflow                              │
+│ - Parallel exploration agents                   │
+│ - Documentation updates                         │
+└─────────────────────────────────────────────────┘
+                    ↓
+┌─────────────────────────────────────────────────┐
+│ superpowers: Execution Layer                    │
+│ - TDD enforcement (test-first)                  │
+│ - Micro-tasks (2-5 min granularity)             │
+│ - Parallel worktrees                            │
+│ - Continuous validation                         │
+└─────────────────────────────────────────────────┘
+```
+
+**Real scenario:**
+```bash
+# Phase 1: Business Planning (MindContext)
+You: "create prd for payment system"
+Claude → pm-agent: Creates PRD with business requirements
+
+# Phase 2: Architecture (MindContext)
+You: "create epic payment"
+Claude → architect-agent: Technical design decisions
+
+# Phase 3: Task Breakdown (MindContext)
+You: "plan epic payment"
+Claude: Creates tasks with dependencies
+
+# Phase 4: Feature Implementation (feature-dev)
+You: "implement payment processing"
+Claude: 7-phase workflow with exploration
+
+# Phase 5: TDD Execution (superpowers)
+You: "implement with TDD"
+Claude → superpowers: Enforces test-first micro-steps
+
+# Phase 6: Session Wrap (MindContext)
+You: "/eod"
+Claude: Commits, pushes, updates context
+```
+
+### Installation with Other Plugins
+
+```bash
+# Install MindContext
+/plugin marketplace add byteforgeca/mindcontext-skills
+/plugin install mindcontext-skills@byteforgeca
+
+# Install superpowers
+/plugin marketplace add obra/superpowers
+/plugin install superpowers@obra
+
+# Install feature-dev (official)
+/plugin install feature-dev@anthropic
+
+# Verify all three
+/plugin  # Interactive plugin manager
+```
+
+**Result:** Best of all three worlds with zero conflicts.
+
+See [.project/spikes/plugin-ecosystem/plugin-comparison-research.md](.project/spikes/plugin-ecosystem/plugin-comparison-research.md) for detailed analysis.
 
 ## FAQ
 

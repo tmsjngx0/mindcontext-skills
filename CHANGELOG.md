@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2025-12-03
+
+### Removed
+- **tdd-workflow skill** - Removed to eliminate conflict with superpowers plugin
+  - superpowers provides superior TDD enforcement with micro-task granularity
+  - MindContext now focuses on strategic planning layer
+  - Users should install superpowers for TDD workflows
+
+### Added
+- **Plugin ecosystem documentation** - README now explains how MindContext complements other plugins
+  - MindContext + superpowers integration guide
+  - MindContext + feature-dev integration guide
+  - Combined workflow examples showing all three plugins together
+  - Clear division of responsibilities (Strategy/Analysis/Execution layers)
+
+### Changed
+- **plugin.json** - Updated description to reflect 22 skills and plugin complementarity
+  - Version bumped from 2.2.0 → 2.3.0
+  - Description now mentions superpowers and feature-dev compatibility
+- **Total skills: 22** (23 - 1 removed tdd-workflow)
+
 ## [2.2.0] - 2025-12-03
 
 ### Added
