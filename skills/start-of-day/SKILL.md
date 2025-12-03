@@ -105,7 +105,63 @@ if [ -f "CLAUDE.md" ]; then
 fi
 ```
 
-### 4. Show Work State
+### 4. Show Focus State
+
+**Check what you were working on:**
+```bash
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "CURRENT FOCUS"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+if [ -f ".project/state/focus.json" ]; then
+    # Read focus state
+    current_epic=$(jq -r '.current_epic // "none"' .project/state/focus.json)
+    current_issue=$(jq -r '.current_issue // "none"' .project/state/focus.json)
+    current_branch=$(jq -r '.current_branch // "none"' .project/state/focus.json)
+    last_updated=$(jq -r '.last_updated // "never"' .project/state/focus.json)
+
+    if [ "$current_epic" != "none" ] || [ "$current_issue" != "none" ]; then
+        echo "Last Working On:"
+        [ "$current_epic" != "none" ] && echo "  Epic: $current_epic"
+        [ "$current_issue" != "none" ] && echo "  Issue: $current_issue"
+        [ "$current_branch" != "none" ] && echo "  Branch: $current_branch"
+        echo "  Last Updated: $last_updated"
+        echo ""
+
+        # Show issue details if available
+        if [ "$current_issue" != "none" ] && [ "$current_epic" != "none" ]; then
+            issue_file=".project/epics/$current_epic/$current_issue.md"
+            if [ -f "$issue_file" ]; then
+                echo "Issue Details:"
+                # Extract title from issue file (first heading)
+                grep "^# " "$issue_file" | head -1 | sed 's/^# /  /'
+                # Extract status if present
+                status=$(grep "^status:" "$issue_file" | head -1 | cut -d: -f2 | tr -d ' ')
+                [ -n "$status" ] && echo "  Status: $status"
+                echo ""
+                echo "Continue with: '/next' or 'work on task $current_issue'"
+            fi
+        elif [ "$current_epic" != "none" ]; then
+            echo "Continue with: 'work on epic $current_epic' or '/next'"
+        fi
+    else
+        echo "No active focus"
+        echo ""
+        echo "Start work with:"
+        echo "  • 'what's next' - Find next available task"
+        echo "  • 'start epic X' - Begin specific epic"
+        echo "  • 'work on task X' - Resume specific task"
+    fi
+else
+    echo "Focus tracking not initialized"
+    echo ""
+    echo "Initialize with: 'focus on epic X' or 'work on task X'"
+fi
+```
+
+### 5. Show Work State
 
 **Current branch status:**
 ```bash
@@ -132,7 +188,7 @@ echo "Worktrees:"
 git worktree list 2>/dev/null || echo "No worktrees"
 ```
 
-### 5. Check for Issues
+### 6. Check for Issues
 
 Flag problems that need attention:
 
@@ -168,7 +224,7 @@ if [ "$issues" -eq 0 ]; then
 fi
 ```
 
-### 6. Provide Next Steps
+### 7. Provide Next Steps
 
 Based on state, suggest actions:
 
@@ -178,12 +234,13 @@ SESSION READY
 
 ✓ Repository synced
 ✓ Context loaded
+✓ Focus state restored
 ✓ Work state analyzed
 
 Next Steps:
 1. Review any issues above
-2. Check current task/epic status
-3. Continue work or pick next task
+2. Continue focused work with '/next'
+3. Or start new task/epic
 
 Ready to proceed!
 ```
@@ -204,6 +261,20 @@ SYNC WITH REMOTE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [sync results]
 
+CURRENT FOCUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Last Working On:
+  Epic: [epic-name]
+  Issue: [issue-number]
+  Branch: [branch-name]
+  Last Updated: [timestamp]
+
+Issue Details:
+  [Issue title]
+  Status: [status]
+
+Continue with: '/next' or 'work on task [number]'
+
 CURRENT WORK STATE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [branch, status, recent commits]
@@ -220,6 +291,9 @@ SESSION READY
 ## Notes
 
 - Always syncs BEFORE loading context (ensures latest docs/memories)
+- Reads `.project/state/focus.json` to restore last working state
+- Shows issue details if available (title, status)
+- Suggests how to continue based on focus state
 - Uses fast-forward only pulls for safety
 - Skips auto-pull if uncommitted changes exist
 - Works with submodules and worktrees

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.1] - 2025-12-03
+
+### Changed
+- **start-of-day skill** - Now displays focus state from `.project/state/focus.json`
+  - Shows last working epic, issue, and branch
+  - Displays issue details (title, status) if available
+  - Suggests how to continue work based on focus state
+  - Provides guidance if no focus is set
+  - Integrates seamlessly with `/next` command workflow
+
+### Fixed
+- **Focus state integration** - `/sod` now properly restores context of what you were working on
+
 ## [2.3.0] - 2025-12-03
 
 ### Removed
