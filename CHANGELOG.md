@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.1] - 2025-12-03
+
+### Added
+- **`.gitattributes` configuration** - project-scaffold now creates `.gitattributes` for consistent line endings
+  - Enforces LF (Unix-style) line endings across all platforms
+  - Prevents CRLF/LF conflicts between Windows, Mac, and WSL
+  - Covers all common source code file types
+  - Handles binary files appropriately
+  - Includes Windows-specific files (`.bat`, `.cmd`, `.ps1`) with CRLF
+  - Automatically normalizes existing files in brownfield projects
+
+### Fixed
+- **Cross-platform line ending issues** - No more "whitespace only" diffs in git
+
 ## [2.4.0] - 2025-12-03
 
 ### Added

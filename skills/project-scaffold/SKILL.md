@@ -122,13 +122,83 @@ Create `.project/state/focus.json` with:
 }
 ```
 
-### 7. GitHub Labels (Optional)
+### 7. Create .gitattributes (Line Ending Consistency)
+
+Create or update `.gitattributes` in project root to enforce consistent line endings across Mac/Windows/WSL:
+
+```gitattributes
+# Auto-detect text files and normalize to LF on commit
+* text=auto eol=lf
+
+# Explicitly declare text files
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+
+# Source code
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.py text eol=lf
+*.rs text eol=lf
+*.go text eol=lf
+*.java text eol=lf
+*.c text eol=lf
+*.cpp text eol=lf
+*.h text eol=lf
+*.cs text eol=lf
+*.rb text eol=lf
+*.php text eol=lf
+
+# Shell scripts must have LF
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows scripts must have CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+```
+
+**Why this matters:**
+- Prevents CRLF/LF conflicts between Windows, Mac, and WSL
+- Enforces LF (Unix-style) line endings for source code
+- Works automatically for all team members
+- Prevents "whitespace only" diffs in git
+
+**After creating `.gitattributes`:**
+```bash
+# Normalize existing files (if converting brownfield project)
+git add --renormalize .
+git commit -m "chore: Normalize line endings"
+```
+
+### 8. GitHub Labels (Optional)
 
 If `gh` CLI is available and authenticated, create labels:
 - `epic` (green)
 - `task` (blue)
 
-### 8. Summary
+### 9. Summary
 
 Show user:
 
@@ -142,8 +212,12 @@ Created:
   .project/state/focus.json
   .project/config.json
   CLAUDE.md
+  .gitattributes (line ending consistency)
 
 Detected: [project type]
+
+Line Endings: Configured to use LF (Unix-style) across all platforms
+✓ Prevents CRLF/LF conflicts between Windows/Mac/WSL
 
 Next: "Create a PRD for [your-first-feature]"
 ```
