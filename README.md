@@ -134,6 +134,7 @@ All commands use natural language—just describe what you need.
 | `start-of-day` | "sod", "start of day", "morning sync" | Sync repos, prime context, show status |
 | `end-of-day` | "eod", "end of day", "wrap up" | Check uncommitted changes, update context |
 | `prime-context` | "prime context", "load context" | Load project context files |
+| `update-context` | "update context", "save context", "sync context" | Save session state to context files |
 | `session-init` | "start session", "init session" | Initialize work session |
 | `focus-state` | "what am I working on", "focus on epic X" | Manage current work focus (epic/issue/branch) |
 
@@ -314,25 +315,27 @@ See [shadow-setup skill](skills/shadow-setup/SKILL.md) for the full walkthrough.
 
 ## Available Commands
 
-MindContext includes **10 workflow-focused commands** for common operations:
+MindContext includes **12 workflow-focused commands** for common operations:
 
 ### Session Commands
 - `/sod` - Start of day (sync repos, load context, show status)
 - `/eod` - End of day (check uncommitted, update context)
+- `/update-context` - Save session context before memory clear
 
 ### Planning Commands
 - `/prd` - Create PRD
 - `/epic` - Create epic from PRD
 - `/plan` - Decompose epic into tasks
+- `/update-plan` - Incorporate external LLM review feedback
 
 ### Working Commands
 - `/next` - Find next available task
 - `/focus` - Manage current work focus
-- `/commit` - Smart commit across repos
+- `/commit` - Smart commit across repos (use `/commit full` for context updates)
 
 ### Syncing & Setup
 - `/sync` - Sync to GitHub
-- `/shadow` - Setup Shadow Engineering
+- `/project-init` - Initialize MindContext project structure
 
 **Note:** Analysis commands (analyze, debug, find, review, trace, security) were removed in v2.1.0. Use natural language instead - Claude routes to the correct agent automatically.
 

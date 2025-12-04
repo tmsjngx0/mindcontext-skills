@@ -17,7 +17,7 @@ After reviewing current task/issue with another LLM:
 ```
 
 Claude will:
-1. Read current context (focused issue from .project/state/focus.json)
+1. Read current context (focused issue from .project/context/focus.json)
 2. Incorporate the review feedback into understanding
 3. Update issue file if improvements suggested
 4. Remember feedback for implementation

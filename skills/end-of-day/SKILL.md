@@ -64,11 +64,11 @@ Remote: [✓ Up to date / ⚠ X commits ahead]
 **Update Focus Timestamp:**
 ```bash
 # Refresh focus.json timestamp to reflect end of session
-if [ -f ".project/state/focus.json" ]; then
+if [ -f ".project/context/focus.json" ]; then
     jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
        '.last_updated = $ts' \
-       .project/state/focus.json > /tmp/focus.json && \
-       mv /tmp/focus.json .project/state/focus.json
+       .project/context/focus.json > /tmp/focus.json && \
+       mv /tmp/focus.json .project/context/focus.json
     echo "✓ Focus state updated"
 fi
 ```

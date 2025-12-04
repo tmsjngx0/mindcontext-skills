@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`update-context` skill** - Save session state to context files before memory clear
+  - New `/update-context` command
+  - Updates focus.json, progress.md with session work
+  - Pairs with prime-context for full context cycle
+
+### Changed
+- **`smart-commit` skill** - Added optional pre-commit context check
+  - Use `/commit full` to update CLAUDE.md, progress.md, README, CHANGELOG before committing
+  - Default `/commit` skips context check for quick commits
+- **`/project-init` command** - Replaces `/shadow` command
+  - `/shadow` removed (use `shadow-setup` skill via natural language)
+  - `/project-init` triggers brainstorming-driven project initialization
+- **Focus state path** - Standardized to `.project/context/focus.json`
+  - Fixed inconsistent references to `.project/state/focus.json`
+  - Affected: start-of-day, end-of-day, epic-start, task-workflow, next, update-plan
+
+### Fixed
+- **Consistent focus.json location** - All skills now use `.project/context/focus.json`
+
 ## [1.0.0] - 2025-12-04
 
 First public release of MindContext Skills.

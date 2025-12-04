@@ -30,6 +30,59 @@ The skill detects and handles these change types:
 
 ## Workflow
 
+### Phase 0: Pre-Commit Context Check (Optional)
+
+**Optionally check if project documentation needs updating before committing.**
+
+This phase is **skipped by default** for quick commits. To enable:
+- User says "commit with context update" or "full commit"
+- Or significant changes detected (new features, breaking changes)
+
+**Step 0.1: Quick Check**
+
+```bash
+# Only prompt if significant changes detected
+# Skip for: typo fixes, minor edits, WIP commits
+
+# Check if any of these exist and might need updates:
+test -f CLAUDE.md && echo "CLAUDE.md exists"
+test -f .project/context/progress.md && echo "progress.md exists"
+test -f README.md && echo "README.md exists"
+test -f CHANGELOG.md && echo "CHANGELOG.md exists"
+```
+
+**Step 0.2: Prompt Only if Relevant**
+
+For significant commits (new features, breaking changes), offer context update:
+
+```
+Context files may benefit from updates:
+
+[ ] CLAUDE.md - Project guidelines
+[ ] progress.md - Session progress
+[ ] README.md - User documentation
+[ ] CHANGELOG.md - Version history
+
+Update before commit? (y/n/select)
+```
+
+**Step 0.3: If User Accepts**
+
+| File | Update With |
+|------|-------------|
+| `progress.md` | Session summary, changes made |
+| `CLAUDE.md` | Project state if structure changed |
+| `CHANGELOG.md` | New entry under [Unreleased] |
+| `README.md` | Feature list if user-facing changes |
+
+**Step 0.4: Stage Updates**
+
+```bash
+git add CLAUDE.md .project/context/progress.md README.md CHANGELOG.md 2>/dev/null
+```
+
+---
+
 ### Phase 1: Discovery
 
 **Step 1.1: Identify Repository Structure**

@@ -10,7 +10,7 @@ Execute complete task lifecycle with developer-agent orchestration.
 When main Claude agent spawns developer-agent for this task, the developer-agent should execute the full workflow:
 
 1. **Load task** - Read task file from `.project/epics/{epic}/{number}.md`
-2. **Set focus** - Update `.project/state/focus.json` with current task
+2. **Set focus** - Update `.project/context/focus.json` with current task
 3. **Analyze** - Understand requirements and existing patterns
 4. **Implement** - Write code following architecture
 5. **Validate** - Build, test, verify
@@ -42,14 +42,14 @@ jq --arg epic "$EPIC" \
    --arg branch "$BRANCH" \
    --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
    '.current_epic = $epic | .current_issue = $issue | .current_branch = $branch | .last_updated = $ts' \
-   .project/state/focus.json > /tmp/focus.json && \
-   mv /tmp/focus.json .project/state/focus.json
+   .project/context/focus.json > /tmp/focus.json && \
+   mv /tmp/focus.json .project/context/focus.json
 
 # At task completion - Update timestamp
 jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
    '.last_updated = $ts' \
-   .project/state/focus.json > /tmp/focus.json && \
-   mv /tmp/focus.json .project/state/focus.json
+   .project/context/focus.json > /tmp/focus.json && \
+   mv /tmp/focus.json .project/context/focus.json
 ```
 
 Quality gates enforced:

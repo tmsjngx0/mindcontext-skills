@@ -9,7 +9,7 @@ Continue implementation or find the next thing to work on.
 ## Priority Order
 
 **1. Check focus state (continue current work)**
-   - If `.project/state/focus.json` has current task
+   - If `.project/context/focus.json` has current task
    - Continue working on that task
    - Use any feedback from `/update-plan`
 

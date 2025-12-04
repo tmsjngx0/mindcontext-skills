@@ -115,12 +115,12 @@ echo "CURRENT FOCUS"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-if [ -f ".project/state/focus.json" ]; then
+if [ -f ".project/context/focus.json" ]; then
     # Read focus state
-    current_epic=$(jq -r '.current_epic // "none"' .project/state/focus.json)
-    current_issue=$(jq -r '.current_issue // "none"' .project/state/focus.json)
-    current_branch=$(jq -r '.current_branch // "none"' .project/state/focus.json)
-    last_updated=$(jq -r '.last_updated // "never"' .project/state/focus.json)
+    current_epic=$(jq -r '.current_epic // "none"' .project/context/focus.json)
+    current_issue=$(jq -r '.current_issue // "none"' .project/context/focus.json)
+    current_branch=$(jq -r '.current_branch // "none"' .project/context/focus.json)
+    last_updated=$(jq -r '.last_updated // "never"' .project/context/focus.json)
 
     if [ "$current_epic" != "none" ] || [ "$current_issue" != "none" ]; then
         echo "Last Working On:"
@@ -291,7 +291,7 @@ SESSION READY
 ## Notes
 
 - Always syncs BEFORE loading context (ensures latest docs/memories)
-- Reads `.project/state/focus.json` to restore last working state
+- Reads `.project/context/focus.json` to restore last working state
 - Shows issue details if available (title, status)
 - Suggests how to continue based on focus state
 - Uses fast-forward only pulls for safety

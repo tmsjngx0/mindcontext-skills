@@ -79,8 +79,8 @@ jq --arg epic "$EPIC" \
    --arg branch "epic/$EPIC" \
    --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
    '.current_epic = $epic | .current_issue = null | .current_branch = $branch | .last_updated = $ts' \
-   .project/state/focus.json > /tmp/focus.json && \
-   mv /tmp/focus.json .project/state/focus.json
+   .project/context/focus.json > /tmp/focus.json && \
+   mv /tmp/focus.json .project/context/focus.json
 
 echo "✓ Focus set to epic: $EPIC"
 ```

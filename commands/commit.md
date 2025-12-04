@@ -13,4 +13,19 @@ This will:
 4. Commit in the correct order (submodules first, then parent)
 5. Push changes
 
-Invoke the smart-commit skill: "smart commit"
+## Usage
+
+```bash
+/commit              # Quick commit (default)
+/commit full         # With context file updates (CLAUDE.md, progress.md, README, CHANGELOG)
+```
+
+## Context Update Option
+
+Use "full" or "with context" to update documentation before committing:
+- `CLAUDE.md` - Project guidelines
+- `.project/context/progress.md` - Session progress
+- `README.md` - User documentation
+- `CHANGELOG.md` - Version history
+
+Invoke the smart-commit skill: "smart commit" or "full commit"
