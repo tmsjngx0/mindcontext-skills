@@ -21,7 +21,7 @@ claude  # or open in VS Code
 
 | Skill | Trigger | Expected |
 |-------|---------|----------|
-| project-scaffold | "Initialize MindContext" | Creates .project/ |
+| project-init | "Initialize MindContext" | Creates .project/ |
 | session-init | "Start session" | Shows status |
 | prd-create | "Create PRD for login" | Creates .project/prds/login.md |
 | epic-planning | "Plan login epic" | Creates tasks in epic dir |

@@ -126,11 +126,13 @@ All commands use natural language—just describe what you need.
 |-------|----------|-------------|
 | `project-init` | "initialize project", "init project", "set up mindcontext" | Create `.project/` structure with brainstorming-driven design |
 | `project-migrate` | "migrate project", "convert to mindcontext" | Migrate existing PM files to MindContext |
+| `shadow-setup` | "setup shadow engineering", "separate AI context" | Initialize Shadow Engineering (parent + submodule pattern) |
 
 ### Session Management
 | Skill | Triggers | Description |
 |-------|----------|-------------|
 | `start-of-day` | "sod", "start of day", "morning sync" | Sync repos, prime context, show status |
+| `end-of-day` | "eod", "end of day", "wrap up" | Check uncommitted changes, update context |
 | `prime-context` | "prime context", "load context" | Load project context files |
 | `session-init` | "start session", "init session" | Initialize work session |
 | `focus-state` | "what am I working on", "focus on epic X" | Manage current work focus (epic/issue/branch) |
@@ -156,7 +158,13 @@ All commands use natural language—just describe what you need.
 |-------|----------|-------------|
 | `smart-commit` | "commit", "smart commit", "save work" | Intelligent commit across submodules, worktrees, and parent repo |
 | `merge-workflow` | "merge X into Y", "combine branches" | Branch merge with conflict resolution |
+| `git-sync` | "sync to github", "sync epic to issues" | Sync tasks to GitHub issues |
 
+### Reporting
+| Skill | Triggers | Description |
+|-------|----------|-------------|
+| `project-status` | "project status", "show status", "overview" | Show overall project status (epics, tasks, progress) |
+| `standup-report` | "standup", "daily standup", "what did I do" | Generate daily standup report |
 
 ### Code Analysis
 | Skill | Triggers | Description |
