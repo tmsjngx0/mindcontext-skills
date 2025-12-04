@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2025-12-04
+
+### Added
+- **`.project/plans/` folder** - Technical planning outside PRD→Epic flow
+  - Architecture plans, migration strategies, integration plans
+  - Documented in README with usage guide
+  - Complements prds/, epics/, spikes/ structure
+
+- **Worktree documentation** - Shadow Engineering now includes multi-branch workflow
+  - Use `.git/info/exclude` for local excludes (not `.gitignore`)
+  - Worktrees for parallel branch development
+  - Clear guidance on parent vs submodule paths
+
+### Changed
+- **Renamed `project-scaffold` → `project-init`** - Brainstorming-driven project initialization
+  - Conversational discovery flow (one question at a time)
+  - Greenfield vs brownfield detection
+  - Creates `.project/design.md` with project vision
+  - Feature prioritization before first PRD
+
+- **Deprecated agents** - `architect-agent` and `qa-agent` now recommend feature-dev plugin
+  - feature-dev's `code-architect` replaces architect-agent
+  - feature-dev's `code-reviewer` replaces qa-agent
+  - Original agents kept for reference but marked deprecated
+  - Reduces token usage (no Serena dependency)
+
+### Fixed
+- **Owner references** - Updated from byteforgeca to tmsjngx0
+
+### Migration
+- `project-scaffold` triggers still work but will use `project-init`
+- Existing projects don't need changes
+- Consider using feature-dev plugin for architecture/review work
+
 ## [2.4.1] - 2025-12-03
 
 ### Added

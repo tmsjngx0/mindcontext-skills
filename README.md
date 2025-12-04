@@ -30,14 +30,14 @@ MindContext helps you move from "it works on my machine" to "it works in product
 
 **Step 1: Add the marketplace**
 ```
-/plugin marketplace add byteforgeca/mindcontext-skills
+/plugin marketplace add tmsjngx0/mindcontext-skills
 ```
 
-This points Claude Code to the GitHub repository at `https://github.com/byteforgeca/mindcontext-skills` and registers it as a plugin marketplace.
+This points Claude Code to the GitHub repository at `https://github.com/tmsjngx0/mindcontext-skills` and registers it as a plugin marketplace.
 
 **Step 2: Install the plugin**
 ```
-/plugin install mindcontext-skills@byteforgeca
+/plugin install mindcontext-skills@tmsjngx0
 ```
 
 Or use the interactive browser:
@@ -48,7 +48,7 @@ Then select "Browse Plugins" and find mindcontext-skills.
 
 **Quick one-liner:**
 ```
-/plugin marketplace add byteforgeca/mindcontext-skills && /plugin install mindcontext-skills@byteforgeca
+/plugin marketplace add tmsjngx0/mindcontext-skills && /plugin install mindcontext-skills@tmsjngx0
 ```
 
 ### Option 2: From Local Path
@@ -92,9 +92,9 @@ Or ask Claude what skills are available:
 
 ```
 /plugin                                    # Interactive plugin manager
-/plugin enable mindcontext-skills@byteforgeca  # Enable plugin
-/plugin disable mindcontext-skills@byteforgeca # Disable plugin
-/plugin uninstall mindcontext-skills@byteforgeca # Remove plugin
+/plugin enable mindcontext-skills@tmsjngx0  # Enable plugin
+/plugin disable mindcontext-skills@tmsjngx0 # Disable plugin
+/plugin uninstall mindcontext-skills@tmsjngx0 # Remove plugin
 ```
 
 ## Quick Start
@@ -425,7 +425,7 @@ MindContext works out of the box. Optional customization in `CLAUDE.md`:
 
 **Marketplace plugin:**
 ```
-/plugin uninstall mindcontext-skills@byteforgeca
+/plugin uninstall mindcontext-skills@tmsjngx0
 ```
 
 **Manual installation:**
@@ -565,8 +565,8 @@ Claude: Commits, pushes, updates context
 
 ```bash
 # Install MindContext
-/plugin marketplace add byteforgeca/mindcontext-skills
-/plugin install mindcontext-skills@byteforgeca
+/plugin marketplace add tmsjngx0/mindcontext-skills
+/plugin install mindcontext-skills@tmsjngx0
 
 # Install superpowers
 /plugin marketplace add obra/superpowers
@@ -601,7 +601,7 @@ Yes. MIT licensed and fully open source.
 
 ## Contributing
 
-Issues and PRs welcome at: https://github.com/byteforgeca/mindcontext-skills
+Issues and PRs welcome at: https://github.com/tmsjngx0/mindcontext-skills
 
 ## License
 
