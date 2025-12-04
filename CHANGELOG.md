@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-rc.1] - 2025-12-04
+
+### Changed
+- **Version reset** - Renumbered from internal v2.x to v1.0.0-rc.1 for public release
+- **Owner updated** - Repository moved to tmsjngx0/mindcontext-skills
+
+### Note
+Previous v2.x versions were internal development iterations. This is the first release candidate for public use.
+
+---
+
+## Pre-release History (Internal v2.x)
+
 ## [2.4.1] - 2025-12-03
 
 ### Added
