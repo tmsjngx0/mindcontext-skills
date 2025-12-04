@@ -7,14 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0-rc.1] - 2025-12-04
+## [1.0.0] - 2025-12-04
+
+First public release of MindContext Skills.
+
+### Added
+- **`.project/plans/` folder** - Technical planning outside PRD→Epic flow
+  - Architecture plans, migration strategies, integration plans
+  - Documented in README with usage guide
+  - Complements prds/, epics/, spikes/ structure
+
+- **Worktree documentation** - Shadow Engineering now includes multi-branch workflow
+  - Use `.git/info/exclude` for local excludes (not `.gitignore`)
+  - Worktrees for parallel branch development
+  - Clear guidance on parent vs submodule paths
 
 ### Changed
-- **Version reset** - Renumbered from internal v2.x to v1.0.0-rc.1 for public release
+- **Renamed `project-scaffold` → `project-init`** - Brainstorming-driven project initialization
+  - Conversational discovery flow (one question at a time)
+  - Greenfield vs brownfield detection
+  - Creates `.project/design.md` with project vision
+  - Feature prioritization before first PRD
+
+- **Deprecated agents** - `architect-agent` and `qa-agent` now recommend feature-dev plugin
+  - feature-dev's `code-architect` replaces architect-agent
+  - feature-dev's `code-reviewer` replaces qa-agent
+  - Original agents kept for reference but marked deprecated
+  - Reduces token usage (no Serena dependency)
+
+- **Version reset** - Renumbered from internal v2.x to v1.0.0 for public release
 - **Owner updated** - Repository moved to tmsjngx0/mindcontext-skills
 
-### Note
-Previous v2.x versions were internal development iterations. This is the first release candidate for public use.
+### Migration from rc.1
+- `project-scaffold` triggers still work but will use `project-init`
+- Existing projects don't need changes
+- Consider using feature-dev plugin for architecture/review work
 
 ---
 

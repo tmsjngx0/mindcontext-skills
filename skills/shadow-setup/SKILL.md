@@ -7,7 +7,7 @@ description: Initialize Shadow Engineering structure - AI orchestration in paren
 
 Initialize the Shadow Engineering pattern: AI orchestration in parent repo, clean production code in submodule.
 
-**Note:** This skill automatically runs `project-scaffold` to initialize `.project/` in the parent repo, then adds the submodule pattern for clean code separation.
+**Note:** This skill automatically runs `project-init` to initialize `.project/` in the parent repo, then adds the submodule pattern for clean code separation.
 
 ## What is Shadow Engineering?
 
@@ -356,6 +356,71 @@ Clean, professional commits. AI orchestration hidden in parent.
 - Clean git history
 - Professional documentation
 - Client owns submodule repo
+
+## Advanced: Worktrees for Multi-Branch Development
+
+When you need to work on multiple submodule branches simultaneously (develop, main, legacy):
+
+```
+my-project-mgmt/                   # Parent (main only)
+├── .project/
+├── my-project/                    # Submodule (main branch)
+└── worktrees/
+    ├── my-project-develop/        # develop branch worktree
+    └── my-project-legacy/         # legacy branch worktree
+```
+
+**Setup Worktrees:**
+
+```bash
+# From submodule directory
+cd my-project
+
+# Create branches
+git branch develop
+git branch legacy/v1
+git push -u origin develop legacy/v1
+
+# Create worktrees in parent
+mkdir -p ../worktrees
+git worktree add ../worktrees/my-project-develop develop
+git worktree add ../worktrees/my-project-legacy legacy/v1
+```
+
+**IMPORTANT: Add to `.git/info/exclude` (NOT `.gitignore`)**
+
+Worktrees and other parent-specific paths should go in `.git/info/exclude`:
+
+```bash
+# Edit parent's .git/info/exclude
+cat >> .git/info/exclude << 'EOF'
+
+# Shadow Engineering excludes (local only, not committed)
+# Submodule worktrees
+worktrees/
+
+# Archives and reference repos
+.archive/
+ref/
+EOF
+```
+
+**Why `.git/info/exclude` instead of `.gitignore`?**
+- `.gitignore` is committed → shared with team
+- `.git/info/exclude` is local → specific to this clone
+- Shadow Engineering parent is YOUR workspace, these paths are local-only
+
+**Update CLAUDE.md to document this:**
+
+Add to the generated CLAUDE.md:
+```markdown
+## Git Exclude (Local)
+
+These paths are in `.git/info/exclude` (not `.gitignore`):
+- `worktrees/` - Submodule branch checkouts
+- `.archive/` - Archived experiments
+- `ref/` - Reference repositories
+```
 
 ## Advanced: Multiple Submodules
 

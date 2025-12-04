@@ -124,13 +124,15 @@ All commands use natural language—just describe what you need.
 ### Project Setup
 | Skill | Triggers | Description |
 |-------|----------|-------------|
-| `project-scaffold` | "initialize project", "set up mindcontext" | Create `.project/` structure |
+| `project-init` | "initialize project", "init project", "set up mindcontext" | Create `.project/` structure with brainstorming-driven design |
 | `project-migrate` | "migrate project", "convert to mindcontext" | Migrate existing PM files to MindContext |
+| `shadow-setup` | "setup shadow engineering", "separate AI context" | Initialize Shadow Engineering (parent + submodule pattern) |
 
 ### Session Management
 | Skill | Triggers | Description |
 |-------|----------|-------------|
 | `start-of-day` | "sod", "start of day", "morning sync" | Sync repos, prime context, show status |
+| `end-of-day` | "eod", "end of day", "wrap up" | Check uncommitted changes, update context |
 | `prime-context` | "prime context", "load context" | Load project context files |
 | `session-init` | "start session", "init session" | Initialize work session |
 | `focus-state` | "what am I working on", "focus on epic X" | Manage current work focus (epic/issue/branch) |
@@ -156,7 +158,13 @@ All commands use natural language—just describe what you need.
 |-------|----------|-------------|
 | `smart-commit` | "commit", "smart commit", "save work" | Intelligent commit across submodules, worktrees, and parent repo |
 | `merge-workflow` | "merge X into Y", "combine branches" | Branch merge with conflict resolution |
+| `git-sync` | "sync to github", "sync epic to issues" | Sync tasks to GitHub issues |
 
+### Reporting
+| Skill | Triggers | Description |
+|-------|----------|-------------|
+| `project-status` | "project status", "show status", "overview" | Show overall project status (epics, tasks, progress) |
+| `standup-report` | "standup", "daily standup", "what did I do" | Generate daily standup report |
 
 ### Code Analysis
 | Skill | Triggers | Description |
@@ -242,6 +250,10 @@ your-project/
 │   │       ├── 001.md     # Task 1
 │   │       ├── 002.md     # Task 2
 │   │       └── updates/   # Progress tracking
+│   ├── plans/             # Technical plans outside PRD→Epic flow
+│   │   └── *.md           # Architecture, migration, integration plans
+│   ├── spikes/            # Research, experiments, exploration
+│   │   └── *.md
 │   └── context/           # Project context
 │       ├── progress.md    # Current progress
 │       ├── project-overview.md
@@ -249,6 +261,20 @@ your-project/
 ├── CLAUDE.md              # AI instructions
 └── README.md
 ```
+
+### When to Use Each Folder
+
+| Folder | Purpose | Examples |
+|--------|---------|----------|
+| `prds/` | Business requirements for features | `user-auth.md`, `payment-system.md` |
+| `epics/` | Implementation plans with tasks | `user-auth/epic.md`, `user-auth/001.md` |
+| `plans/` | Technical planning outside feature flow | Architecture plans, migration strategies, integration plans, refactor roadmaps |
+| `spikes/` | Research and exploration | Technology evaluations, POCs, feasibility studies |
+| `context/` | Current state and focus | `progress.md`, `focus.json` |
+
+**Key distinction:**
+- **PRD → Epic** = Feature development flow (most common)
+- **Plans** = Technical planning that doesn't fit the PRD→Epic pattern (architecture decisions, system-wide changes, migration strategies)
 
 ## Shadow Engineering
 

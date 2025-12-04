@@ -5,7 +5,7 @@ description: Manage current work focus (epic/issue/branch). Use when user says "
 
 # Focus State
 
-Track and manage current work context in `.project/state/focus.json`.
+Track and manage current work context in `.project/context/focus.json`.
 
 ## When to Use
 
@@ -19,7 +19,7 @@ Track and manage current work context in `.project/state/focus.json`.
 ### Show Current Focus
 
 ```bash
-cat .project/state/focus.json | jq -r '
+cat .project/context/focus.json | jq -r '
   "Current Focus:",
   "  Epic: \(.current_epic // "none")",
   "  Issue: \(.current_issue // "none")",
@@ -34,8 +34,8 @@ cat .project/state/focus.json | jq -r '
 EPIC="$1"
 jq --arg epic "$EPIC" --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
   '.current_epic = $epic | .last_updated = $ts' \
-  .project/state/focus.json > /tmp/focus.json && \
-  mv /tmp/focus.json .project/state/focus.json
+  .project/context/focus.json > /tmp/focus.json && \
+  mv /tmp/focus.json .project/context/focus.json
 ```
 
 ### Set Issue Focus
@@ -44,8 +44,8 @@ jq --arg epic "$EPIC" --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
 ISSUE="$1"
 jq --arg issue "$ISSUE" --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
   '.current_issue = $issue | .last_updated = $ts' \
-  .project/state/focus.json > /tmp/focus.json && \
-  mv /tmp/focus.json .project/state/focus.json
+  .project/context/focus.json > /tmp/focus.json && \
+  mv /tmp/focus.json .project/context/focus.json
 ```
 
 ### Clear Focus
@@ -53,8 +53,8 @@ jq --arg issue "$ISSUE" --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
 ```bash
 jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
   '.current_epic = null | .current_issue = null | .current_branch = null | .last_updated = $ts' \
-  .project/state/focus.json > /tmp/focus.json && \
-  mv /tmp/focus.json .project/state/focus.json
+  .project/context/focus.json > /tmp/focus.json && \
+  mv /tmp/focus.json .project/context/focus.json
 ```
 
 ## Notes
