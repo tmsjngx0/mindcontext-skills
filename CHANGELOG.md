@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.5.0] - 2025-12-04
+## [1.0.0] - 2025-12-04
+
+First public release of MindContext Skills.
 
 ### Added
 - **`.project/plans/` folder** - Technical planning outside PRD→Epic flow
@@ -33,13 +35,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Original agents kept for reference but marked deprecated
   - Reduces token usage (no Serena dependency)
 
-### Fixed
-- **Owner references** - Updated from byteforgeca to tmsjngx0
+- **Version reset** - Renumbered from internal v2.x to v1.0.0 for public release
+- **Owner updated** - Repository moved to tmsjngx0/mindcontext-skills
 
-### Migration
+### Migration from rc.1
 - `project-scaffold` triggers still work but will use `project-init`
 - Existing projects don't need changes
 - Consider using feature-dev plugin for architecture/review work
+
+---
+
+## Pre-release History (Internal v2.x)
 
 ## [2.4.1] - 2025-12-03
 
