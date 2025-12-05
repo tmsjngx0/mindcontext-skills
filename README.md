@@ -180,10 +180,9 @@ MindContext includes specialized agents using BMAD (Business Model Amplification
 |-------|---------|-------|---------|
 | `pm-agent` | Strategic discovery and PRD creation | opus | `create prd` |
 | `architect-agent` | Technical design and epic creation | opus | `create epic` |
-| `qa-agent` | Quality validation and testing | opus | Code review, testing |
 | `tdd-agent` | Test-driven development enforcement | inherit | `tdd`, `test first` |
 
-**Note:** For code exploration, architecture design, and implementation, use the `feature-dev` plugin's agents (`code-explorer`, `code-architect`, `code-reviewer`).
+**Note:** For code exploration, architecture design, implementation, and code review, use the `feature-dev` plugin's agents (`code-explorer`, `code-architect`, `code-reviewer`).
 
 ### How Agents Work
 
@@ -216,8 +215,7 @@ Skills automatically route to appropriate agents based on the operation:
 | "plan epic auth" | architect-agent | Task decomposition, dependency mapping |
 | "work on task 3" | task-start skill | Routes to feature-dev or direct implementation |
 | "tdd for UserService" | tdd-agent | Test-driven development enforcement |
-| "analyze this code" | qa-agent | Bug hunting, quality analysis |
-| "review my changes" | code-reviewer (feature-dev) | Code review, pattern validation |
+| "review my changes" | code-reviewer (feature-dev) | Code review, quality analysis |
 
 **No routing skill needed** - Main agent reads skill descriptions and user intent, then spawns the appropriate subagent with context.
 
@@ -228,9 +226,8 @@ Agents use [Serena MCP](https://github.com/oraios/serena) for intelligent code a
 | Agent | Serena Tools |
 |-------|-------------|
 | `architect-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
-| `qa-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
 
-**Note:** For code exploration and editing, prefer `feature-dev` plugin's agents which are more token-efficient.
+**Note:** For code exploration, editing, and review, prefer `feature-dev` plugin's agents which are more token-efficient.
 
 **Setup Serena:**
 ```

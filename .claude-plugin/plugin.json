@@ -26,7 +26,6 @@
   "agents": [
     "./agents/pm-agent.md",
     "./agents/architect-agent.md",
-    "./agents/qa-agent.md",
     "./agents/tdd-agent.md"
   ]
 }

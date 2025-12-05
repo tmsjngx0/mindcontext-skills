@@ -359,9 +359,8 @@ Once Serena is configured, MindContext agents automatically use Serena tools:
 | Agent | Serena Tools Used |
 |-------|-------------------|
 | `architect-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
-| `qa-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
 
-**Note:** For code exploration and implementation, prefer `feature-dev` plugin's agents which are more token-efficient.
+**Note:** For code exploration, implementation, and review, prefer `feature-dev` plugin's agents which are more token-efficient.
 
 **Example: Architect using Serena**
 ```
