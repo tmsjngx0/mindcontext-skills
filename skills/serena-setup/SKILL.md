@@ -359,8 +359,9 @@ Once Serena is configured, MindContext agents automatically use Serena tools:
 | Agent | Serena Tools Used |
 |-------|-------------------|
 | `architect-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
-| `developer-agent` | All tools including `replace_symbol_body`, `insert_*`, `rename_symbol` |
 | `qa-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
+
+**Note:** For code exploration and implementation, prefer `feature-dev` plugin's agents which are more token-efficient.
 
 **Example: Architect using Serena**
 ```
@@ -369,15 +370,6 @@ Once Serena is configured, MindContext agents automatically use Serena tools:
   → Uses mcp__serena__get_symbols_overview to understand existing services
   → Uses mcp__serena__find_symbol to examine auth patterns
   → Creates epic with architecture decisions based on current code
-```
-
-**Example: Developer using Serena**
-```
-"implement user login method"
-  → developer-agent spawned
-  → Uses mcp__serena__find_symbol to locate UserService
-  → Uses mcp__serena__insert_after_symbol to add new method
-  → Preserves existing code structure
 ```
 
 ## Output Format

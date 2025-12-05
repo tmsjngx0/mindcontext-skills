@@ -138,10 +138,10 @@ Use "work on task 001" to begin implementation
 
 **Option B: Parallel (Multiple Tasks)**
 
-For parallel execution, main Claude agent can spawn developer-agents for ready tasks:
+For parallel execution on ready tasks:
 
 ```
-🚀 Ready for Parallel Work
+Ready for Parallel Work
 
 Task #001: [Title]
   → Ready to start
@@ -149,7 +149,8 @@ Task #001: [Title]
 Task #002: [Title]
   → Ready to start
 
-Main agent will spawn developer-agents for each task as requested.
+Use "work on task 001" or "/next 001" to start a task.
+For complex tasks, feature-dev workflow will be recommended.
 ```
 
 ### Phase 5: Setup Tracking

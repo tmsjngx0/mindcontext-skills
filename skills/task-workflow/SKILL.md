@@ -5,32 +5,51 @@ description: Execute complete task lifecycle from analysis through implementatio
 
 # Task Workflow
 
-Execute complete task lifecycle with developer-agent orchestration.
+Execute complete task lifecycle with intelligent routing to feature-dev or direct implementation.
 
-When main Claude agent spawns developer-agent for this task, the developer-agent should execute the full workflow:
+## Workflow
 
 1. **Load task** - Read task file from `.project/epics/{epic}/{number}.md`
 2. **Set focus** - Update `.project/context/focus.json` with current task
-3. **Analyze** - Understand requirements and existing patterns
-4. **Implement** - Write code following architecture
+3. **Assess complexity** - Determine if task needs feature-dev
+4. **Execute** - Route to feature-dev or implement directly
 5. **Validate** - Build, test, verify
-6. **Review** - Check acceptance criteria
-7. **Complete** - Update status, track progress, update focus timestamp
+6. **Complete** - Update status, track progress
 
-The developer-agent will:
-- Read task file and epic context
-- **Set focus state** - Update focus.json with current task at start
-- Check dependencies before starting
-- Create implementation plan from acceptance criteria
-- Write code matching existing patterns
-- Run build and tests to validate
-- Verify all acceptance criteria are met
-- Update task status to `done` when complete
-- **Update focus timestamp** - Refresh last_updated when task completes
-- Track progress in `.project/context/progress.md`
-- Suggest commit message
+## Complexity Assessment
 
-**Focus State Management:**
+**Simple tasks (implement directly):**
+- Single file change
+- Bug fix with known location
+- Documentation update
+- Configuration change
+
+**Complex tasks (recommend feature-dev):**
+- Touches 3+ files
+- New feature integration
+- Architectural decisions needed
+- Task mentions "design", "refactor", "integrate"
+
+## Execution Routes
+
+### Simple Task
+```
+Load task → Set focus → Implement directly → Test → Complete
+```
+
+### Complex Task
+```
+Load task → Set focus → /feature-dev
+  → Phase 2: code-explorer (codebase exploration)
+  → Phase 3: Clarifying questions
+  → Phase 4: code-architect (design)
+  → Phase 5: Implementation (with optional TDD via tdd-agent)
+  → Phase 6: code-reviewer (quality check)
+  → Complete
+```
+
+## Focus State Management
+
 ```bash
 # At task start - Set focus
 EPIC=$(dirname "$TASK_FILE" | xargs basename)
@@ -52,8 +71,9 @@ jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
    mv /tmp/focus.json .project/context/focus.json
 ```
 
-Quality gates enforced:
-- ✓ All tests passing
-- ✓ Build successful
-- ✓ Acceptance criteria met
-- ✓ Code quality validated
+## Quality Gates
+
+- All tests passing
+- Build successful
+- Acceptance criteria met
+- Code quality validated (via code-reviewer if complex)

@@ -41,7 +41,7 @@ User: /next 3
 Follow the standard discovery workflow:
 
 **1. Check focus state (continue current work)**
-   - Read `.project/state/focus.json` (or `.project/context/focus.json`)
+   - Read `.project/context/focus.json`
    - If current task exists and is in_progress:
      - Show task details
      - Ask: "Continue working on this task?"

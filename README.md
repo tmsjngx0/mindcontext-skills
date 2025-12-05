@@ -180,8 +180,10 @@ MindContext includes specialized agents using BMAD (Business Model Amplification
 |-------|---------|-------|---------|
 | `pm-agent` | Strategic discovery and PRD creation | opus | `create prd` |
 | `architect-agent` | Technical design and epic creation | opus | `create epic` |
-| `developer-agent` | Implementation planning and coding | opus | `create issue`, `sync` |
 | `qa-agent` | Quality validation and testing | opus | Code review, testing |
+| `tdd-agent` | Test-driven development enforcement | inherit | `tdd`, `test first` |
+
+**Note:** For code exploration, architecture design, and implementation, use the `feature-dev` plugin's agents (`code-explorer`, `code-architect`, `code-reviewer`).
 
 ### How Agents Work
 
@@ -212,10 +214,10 @@ Skills automatically route to appropriate agents based on the operation:
 | "create prd auth" | pm-agent | Strategic discovery, BMAD methodology |
 | "create epic auth" | architect-agent | Technical design, architecture decisions |
 | "plan epic auth" | architect-agent | Task decomposition, dependency mapping |
-| "work on task 3" | developer-agent | Implementation, coding, testing |
+| "work on task 3" | task-start skill | Routes to feature-dev or direct implementation |
+| "tdd for UserService" | tdd-agent | Test-driven development enforcement |
 | "analyze this code" | qa-agent | Bug hunting, quality analysis |
-| "review my changes" | qa-agent | Code review, pattern validation |
-| "debug this error" | qa-agent | Root cause analysis, troubleshooting |
+| "review my changes" | code-reviewer (feature-dev) | Code review, pattern validation |
 
 **No routing skill needed** - Main agent reads skill descriptions and user intent, then spawns the appropriate subagent with context.
 
@@ -226,8 +228,9 @@ Agents use [Serena MCP](https://github.com/oraios/serena) for intelligent code a
 | Agent | Serena Tools |
 |-------|-------------|
 | `architect-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
-| `developer-agent` | All tools including `replace_symbol_body`, `insert_*`, `rename_symbol` |
 | `qa-agent` | `get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `search_for_pattern` |
+
+**Note:** For code exploration and editing, prefer `feature-dev` plugin's agents which are more token-efficient.
 
 **Setup Serena:**
 ```
