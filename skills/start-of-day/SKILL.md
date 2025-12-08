@@ -1,32 +1,29 @@
 ---
 name: start-of-day
-description: Initialize development session with repo sync, context priming, and work state overview. Use when user says "start of day", "sod", "init session", "morning sync", or "what's my status".
+description: Initialize development session with repo sync, context priming, work state overview, and standup report. Use when user says "start of day", "sod", "init session", "morning sync", "standup", "daily standup", or "what did I do".
 ---
 
 # Start of Day
 
-Prime context and show current work state when starting a development session.
+Complete session initialization with repository sync, context loading, and standup report.
 
 ## When to Use
 
 - Starting a new work session
+- Morning standup meetings
 - Switching workstations
 - Resuming after a break
-- User says "sod", "start of day", "morning sync"
+- User says "sod", "start of day", "morning sync", "standup", "what did I do"
 
 ## Workflow
 
-### 1. Detect Environment
-
-Show current context:
+### 1. Session Header
 
 ```bash
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  START OF DAY - SESSION INITIALIZATION"
+echo "  START OF DAY - $(date +%Y-%m-%d)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "Platform: $(uname -s)"
-echo "Location: $(pwd)"
 echo "Repository: $(basename $(git rev-parse --show-toplevel 2>/dev/null || echo 'Not a git repo'))"
 echo "Branch: $(git branch --show-current 2>/dev/null || echo 'N/A')"
 ```
@@ -35,266 +32,281 @@ echo "Branch: $(git branch --show-current 2>/dev/null || echo 'N/A')"
 
 **CRITICAL:** Pull latest BEFORE priming context.
 
-**Sync main repository:**
 ```bash
 echo ""
-echo "Syncing main repository..."
+echo "REPOSITORY SYNC"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Sync main repository
 git fetch origin
 if [ -z "$(git status --short)" ]; then
     current_branch=$(git branch --show-current)
     behind=$(git rev-list --count HEAD..origin/$current_branch 2>/dev/null || echo "0")
+    ahead=$(git rev-list --count origin/$current_branch..HEAD 2>/dev/null || echo "0")
     if [ "$behind" -gt 0 ]; then
         echo "  Pulling $behind commit(s)..."
         git pull --ff-only
-    else
+    fi
+    if [ "$ahead" -gt 0 ]; then
+        echo "  ⚠️ $ahead unpushed commit(s)"
+    fi
+    if [ "$behind" -eq 0 ] && [ "$ahead" -eq 0 ]; then
         echo "  ✓ Up to date"
     fi
 else
     echo "  ⚠️ Uncommitted changes - skipping pull"
 fi
-```
 
-**Sync submodules (if present):**
-```bash
+# Sync submodules if present
 if [ -f .gitmodules ]; then
-    echo "Syncing submodules..."
-    git submodule update --remote --merge
+    echo "  Syncing submodules..."
+    git submodule update --remote --merge 2>/dev/null
 fi
 ```
 
-**Sync worktrees (if any):**
-```bash
-echo "Checking worktrees..."
-git worktree list --porcelain 2>/dev/null | grep "^worktree " | cut -d' ' -f2 | while read wt; do
-    wt_name=$(basename "$wt")
-    cd "$wt" 2>/dev/null && {
-        if [ -z "$(git status --short)" ]; then
-            git fetch origin 2>/dev/null
-            echo "  ✓ $wt_name: synced"
-        else
-            echo "  ⚠️ $wt_name: uncommitted changes"
-        fi
-    }
-done
-```
+### 3. Yesterday's Activity (Standup)
 
-### 3. Load Project Context
-
-Read key context files:
-
-```bash
-# Check for project context
-if [ -d ".project/context" ]; then
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "PROJECT CONTEXT"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-    # Show progress if exists
-    if [ -f ".project/context/progress.md" ]; then
-        echo ""
-        echo "Current Progress:"
-        head -50 .project/context/progress.md
-    fi
-fi
-
-# Check for CLAUDE.md
-if [ -f "CLAUDE.md" ]; then
-    echo ""
-    echo "Project Guidelines: CLAUDE.md found"
-fi
-```
-
-### 4. Show Focus State
-
-**Check what you were working on:**
 ```bash
 echo ""
+echo "YESTERDAY (What I did)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "CURRENT FOCUS"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
 
-if [ -f ".project/context/focus.json" ]; then
-    # Read focus state
-    current_epic=$(jq -r '.current_epic // "none"' .project/context/focus.json)
-    current_issue=$(jq -r '.current_issue // "none"' .project/context/focus.json)
-    current_branch=$(jq -r '.current_branch // "none"' .project/context/focus.json)
-    last_updated=$(jq -r '.last_updated // "never"' .project/context/focus.json)
-
-    if [ "$current_epic" != "none" ] || [ "$current_issue" != "none" ]; then
-        echo "Last Working On:"
-        [ "$current_epic" != "none" ] && echo "  Epic: $current_epic"
-        [ "$current_issue" != "none" ] && echo "  Issue: $current_issue"
-        [ "$current_branch" != "none" ] && echo "  Branch: $current_branch"
-        echo "  Last Updated: $last_updated"
-        echo ""
-
-        # Show issue details if available
-        if [ "$current_issue" != "none" ] && [ "$current_epic" != "none" ]; then
-            issue_file=".project/epics/$current_epic/$current_issue.md"
-            if [ -f "$issue_file" ]; then
-                echo "Issue Details:"
-                # Extract title from issue file (first heading)
-                grep "^# " "$issue_file" | head -1 | sed 's/^# /  /'
-                # Extract status if present
-                status=$(grep "^status:" "$issue_file" | head -1 | cut -d: -f2 | tr -d ' ')
-                [ -n "$status" ] && echo "  Status: $status"
-                echo ""
-                echo "Continue with: '/next' or 'work on task $current_issue'"
-            fi
-        elif [ "$current_epic" != "none" ]; then
-            echo "Continue with: 'work on epic $current_epic' or '/next'"
-        fi
-    else
-        echo "No active focus"
-        echo ""
-        echo "Start work with:"
-        echo "  • 'what's next' - Find next available task"
-        echo "  • 'start epic X' - Begin specific epic"
-        echo "  • 'work on task X' - Resume specific task"
-    fi
+# Git commits in last 24 hours
+commits=$(git log --oneline --since="24 hours ago" --all 2>/dev/null)
+if [ -n "$commits" ]; then
+    echo "$commits" | while read line; do
+        echo "  • $line"
+    done
 else
-    echo "Focus tracking not initialized"
-    echo ""
-    echo "Initialize with: 'focus on epic X' or 'work on task X'"
+    echo "  (no commits in last 24h)"
+fi
+
+# Recently modified project files
+if [ -d ".project" ]; then
+    recent=$(find .project -name "*.md" -mtime -1 2>/dev/null | head -5)
+    if [ -n "$recent" ]; then
+        echo ""
+        echo "  Modified files:"
+        echo "$recent" | while read f; do
+            echo "    - $(basename $f)"
+        done
+    fi
 fi
 ```
 
-### 5. Show Work State
+### 4. Today's Plan (Current Focus + Next Tasks)
 
-**Current branch status:**
 ```bash
 echo ""
+echo "TODAY (What I'll do)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "CURRENT WORK STATE"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
 
-# Git status summary
-echo "Branch: $(git branch --show-current)"
-echo "Status: $(git status --short | wc -l) uncommitted changes"
-echo ""
+# Check focus state
+if [ -f ".project/context/focus.json" ]; then
+    current_focus=$(jq -r '.current_focus.name // empty' .project/context/focus.json 2>/dev/null)
+    if [ -n "$current_focus" ]; then
+        echo "  Current Focus: $current_focus"
+    fi
 
-# Recent commits
-echo "Recent commits:"
-git log --oneline -5
+    # Show next session tasks
+    next_tasks=$(jq -r '.next_session_tasks[]? // empty' .project/context/focus.json 2>/dev/null)
+    if [ -n "$next_tasks" ]; then
+        echo ""
+        echo "  Planned tasks:"
+        echo "$next_tasks" | while read task; do
+            echo "    • $task"
+        done
+    fi
+fi
+
+# Find in-progress tasks from epics
+if [ -d ".project/epics" ]; then
+    in_progress=$(grep -rl "status:.*in_progress" .project/epics 2>/dev/null | head -3)
+    if [ -n "$in_progress" ]; then
+        echo ""
+        echo "  In-progress:"
+        echo "$in_progress" | while read f; do
+            title=$(grep "^# " "$f" | head -1 | sed 's/^# //')
+            echo "    • $title"
+        done
+    fi
+fi
 ```
 
-**All worktrees (if applicable):**
+### 5. Blockers
+
 ```bash
 echo ""
-echo "Worktrees:"
-git worktree list 2>/dev/null || echo "No worktrees"
+echo "BLOCKERS"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+blockers=0
+
+# Check for blocked tasks
+if [ -d ".project/epics" ]; then
+    blocked=$(grep -rl "status:.*blocked" .project/epics 2>/dev/null)
+    if [ -n "$blocked" ]; then
+        echo "$blocked" | while read f; do
+            title=$(grep "^# " "$f" | head -1 | sed 's/^# //')
+            echo "  ⚠️ $title"
+            blockers=$((blockers + 1))
+        done
+    fi
+fi
+
+# Check for merge conflicts
+if [ -f .git/MERGE_HEAD ]; then
+    echo "  ❌ Merge in progress - resolve conflicts"
+    blockers=$((blockers + 1))
+fi
+
+if [ "$blockers" -eq 0 ]; then
+    echo "  ✓ No blockers"
+fi
 ```
 
-### 6. Check for Issues
-
-Flag problems that need attention:
+### 6. Quick Stats
 
 ```bash
 echo ""
+echo "QUICK STATS"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Commit count (24h)
+commit_count=$(git log --oneline --since="24 hours ago" --all 2>/dev/null | wc -l)
+echo "  Commits (24h): $commit_count"
+
+# Uncommitted changes
+changes=$(git status --short | wc -l)
+echo "  Uncommitted changes: $changes"
+
+# Task counts if epics exist
+if [ -d ".project/epics" ]; then
+    open=$(grep -rl "status:.*open" .project/epics 2>/dev/null | wc -l)
+    in_prog=$(grep -rl "status:.*in_progress" .project/epics 2>/dev/null | wc -l)
+    done=$(grep -rl "status:.*done\|status:.*completed" .project/epics 2>/dev/null | wc -l)
+    echo "  Tasks: $open open | $in_prog active | $done done"
+fi
+```
+
+### 7. Issues & Warnings
+
+```bash
+echo ""
 echo "ISSUES"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 issues=0
 
-# Check for uncommitted changes
+# Uncommitted changes
 if [ -n "$(git status --short)" ]; then
-    echo "⚠️ Uncommitted changes in current directory"
+    echo "  ⚠️ Uncommitted changes"
     issues=$((issues + 1))
 fi
 
-# Check for unpushed commits
+# Unpushed commits
 ahead=$(git rev-list --count origin/$(git branch --show-current)..HEAD 2>/dev/null || echo "0")
 if [ "$ahead" -gt 0 ]; then
-    echo "⚠️ $ahead unpushed commit(s)"
-    issues=$((issues + 1))
-fi
-
-# Check for merge conflicts
-if [ -f .git/MERGE_HEAD ]; then
-    echo "❌ Merge in progress - resolve conflicts"
+    echo "  ⚠️ $ahead unpushed commit(s)"
     issues=$((issues + 1))
 fi
 
 if [ "$issues" -eq 0 ]; then
-    echo "✓ No issues detected"
+    echo "  ✓ No issues"
 fi
 ```
 
-### 7. Provide Next Steps
+### 8. Session Ready
 
-Based on state, suggest actions:
-
-```
-SESSION READY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✓ Repository synced
-✓ Context loaded
-✓ Focus state restored
-✓ Work state analyzed
-
-Next Steps:
-1. Review any issues above
-2. Continue focused work with '/next'
-3. Or start new task/epic
-
-Ready to proceed!
+```bash
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "SESSION READY"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Next Steps:"
+echo "  • '/next' - Continue or find next task"
+echo "  • '/focus' - Check/set current focus"
+echo "  • '/commit' - Commit pending changes"
 ```
 
 ## Output Format
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  START OF DAY - SESSION INITIALIZATION
+  START OF DAY - 2025-12-08
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Platform: [Linux/Darwin/WSL]
-Location: [current path]
-Repository: [repo name]
-Branch: [current branch]
+Repository: my-project
+Branch: main
 
-SYNC WITH REMOTE
+REPOSITORY SYNC
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[sync results]
+  ✓ Up to date
 
-CURRENT FOCUS
+YESTERDAY (What I did)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Last Working On:
-  Epic: [epic-name]
-  Issue: [issue-number]
-  Branch: [branch-name]
-  Last Updated: [timestamp]
+  • abc1234 feat: Add user authentication
+  • def5678 fix: Resolve login bug
 
-Issue Details:
-  [Issue title]
-  Status: [status]
-
-Continue with: '/next' or 'work on task [number]'
-
-CURRENT WORK STATE
+TODAY (What I'll do)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[branch, status, recent commits]
+  Current Focus: API Integration
+
+  Planned tasks:
+    • Implement OAuth flow
+    • Add unit tests
+
+BLOCKERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✓ No blockers
+
+QUICK STATS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Commits (24h): 2
+  Uncommitted changes: 0
+  Tasks: 3 open | 1 active | 5 done
 
 ISSUES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[any problems detected]
+  ✓ No issues
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SESSION READY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[next steps]
+
+Next Steps:
+  • '/next' - Continue or find next task
+  • '/focus' - Check/set current focus
+  • '/commit' - Commit pending changes
+```
+
+## Slack/Teams Format
+
+If user asks for copyable standup format:
+
+```
+**Daily Standup - [date]**
+
+*Yesterday:*
+- [commit/work item]
+- [commit/work item]
+
+*Today:*
+- [planned task]
+- [planned task]
+
+*Blockers:*
+- None
 ```
 
 ## Notes
 
-- Always syncs BEFORE loading context (ensures latest docs/memories)
-- Reads `.project/context/focus.json` to restore last working state
-- Shows issue details if available (title, status)
-- Suggests how to continue based on focus state
-- Uses fast-forward only pulls for safety
-- Skips auto-pull if uncommitted changes exist
-- Works with submodules and worktrees
-- Detects platform automatically
+- Combines session initialization with standup report
+- Syncs BEFORE loading context (ensures latest)
+- Shows yesterday's git commits and modified files
+- Displays today's plan from focus state and tasks
+- Highlights blockers clearly
+- Provides quick stats overview
+- Works with submodules
+- Triggers on both "sod" and "standup" keywords

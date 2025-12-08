@@ -131,7 +131,7 @@ All commands use natural language—just describe what you need.
 ### Session Management
 | Skill | Triggers | Description |
 |-------|----------|-------------|
-| `start-of-day` | "sod", "start of day", "morning sync" | Sync repos, prime context, show status |
+| `start-of-day` | "sod", "start of day", "standup", "what did I do" | Sync repos, prime context, standup report |
 | `end-of-day` | "eod", "end of day", "wrap up" | Check uncommitted changes, update context |
 | `prime-context` | "prime context", "load context" | Load project context files |
 | `update-context` | "update context", "save context", "sync context" | Save session state to context files |
@@ -165,7 +165,6 @@ All commands use natural language—just describe what you need.
 | Skill | Triggers | Description |
 |-------|----------|-------------|
 | `project-status` | "project status", "show status", "overview" | Show overall project status (epics, tasks, progress) |
-| `standup-report` | "standup", "daily standup", "what did I do" | Generate daily standup report |
 
 ### Code Analysis
 | Skill | Triggers | Description |
