@@ -41,6 +41,66 @@ project-init
 
 ---
 
+## Phase 0: Permissions Onboarding (First-time Setup)
+
+On first project initialization, offer to set up recommended permissions for smoother workflow.
+
+### Check if First Time
+
+Look for existing MindContext projects:
+- Check if `~/.claude/settings.json` already has git permissions
+- If not, this is likely first-time setup
+
+### Permissions Prompt
+
+```
+MINDCONTEXT SETUP
+
+For the best experience, add these permissions to your Claude settings.
+This allows MindContext skills to run git commands without prompts.
+
+Add to ~/.claude/settings.json:
+
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(git push:*)",
+      "Bash(git status:*)",
+      "Bash(git branch:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git rev-list:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git submodule:*)",
+      "Bash(git worktree:*)",
+      "Bash(jq:*)",
+      "Bash(date:*)"
+    ]
+  }
+}
+
+Options:
+1. Add permissions now (I'll help merge them)
+2. Skip for now (you'll see permission prompts)
+3. I've already set this up
+```
+
+### If User Chooses Option 1
+
+Read `~/.claude/settings.json`, merge the permissions array (don't overwrite existing), and write back.
+
+**Important:** Ask user to confirm before modifying their global settings.
+
+### After Permissions
+
+Continue with normal project initialization.
+
+---
+
 ## Phase 1: Setup (Steps 1-6)
 
 ### 1. Check Existing Structure

@@ -8,12 +8,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Permissions onboarding in `project-init`** - First-time setup guidance
+  - Phase 0 checks if user has git permissions configured
+  - Shows recommended permissions JSON for smooth workflow
+  - Offers to merge into `~/.claude/settings.json`
+
+### Changed
+- **`start-of-day` skill rewritten** - Now declarative instead of procedural
+  - No embedded bash scripts (fewer permission prompts)
+  - Merged `standup-report` functionality into start-of-day
+  - Triggers on "sod", "standup", "what did I do"
+  - Cleaner output format with Yesterday/Today/Blockers sections
+
+### Removed
+- **`standup-report` skill** - Merged into `start-of-day`
+  - All standup functionality now in start-of-day
+  - One comprehensive session initialization skill
+
+## [1.1.0] - 2025-12-08
+
+### Added
 - **`update-context` skill** - Save session state to context files before memory clear
   - New `/update-context` command
   - Updates focus.json, progress.md with session work
   - Pairs with prime-context for full context cycle
 
 ### Changed
+- **`/next` command** - Now accepts optional task number
+  - `/next` finds next available task
+  - `/next 3` starts task #3 directly
+- **Agent simplification** - Reduced from 4 to 3 agents
+  - Created `tdd-agent` for TDD enforcement during feature-dev Phase 5
+  - Removed `developer-agent` (replaced by tdd-agent)
+  - Removed `qa-agent` (use feature-dev's code-reviewer)
+  - Agents: pm-agent, architect-agent, tdd-agent
 - **`smart-commit` skill** - Added optional pre-commit context check
   - Use `/commit full` to update CLAUDE.md, progress.md, README, CHANGELOG before committing
   - Default `/commit` skips context check for quick commits

@@ -15,261 +15,108 @@ Complete session initialization with repository sync, context loading, and stand
 - Resuming after a break
 - User says "sod", "start of day", "morning sync", "standup", "what did I do"
 
-## Workflow
+## What to Do
 
-### 1. Session Header
+### 1. Repository Sync
 
-```bash
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  START OF DAY - $(date +%Y-%m-%d)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-echo "Repository: $(basename $(git rev-parse --show-toplevel 2>/dev/null || echo 'Not a git repo'))"
-echo "Branch: $(git branch --show-current 2>/dev/null || echo 'N/A')"
-```
+Run these commands and report results:
+- `git fetch origin` - fetch latest
+- `git status` - check for uncommitted changes and ahead/behind
+- `git submodule update --remote --merge` (if .gitmodules exists)
 
-### 2. Sync with Remote
+Report:
+- Branch name
+- Commits ahead/behind origin
+- Uncommitted changes count
+- Submodule sync status
 
-**CRITICAL:** Pull latest BEFORE priming context.
+### 2. Yesterday's Activity
 
-```bash
-echo ""
-echo "REPOSITORY SYNC"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+Gather recent work:
+- `git log --oneline --since="24 hours ago" --all` - commits in last 24h
+- Check `.project/` for recently modified files (if exists)
 
-# Sync main repository
-git fetch origin
-if [ -z "$(git status --short)" ]; then
-    current_branch=$(git branch --show-current)
-    behind=$(git rev-list --count HEAD..origin/$current_branch 2>/dev/null || echo "0")
-    ahead=$(git rev-list --count origin/$current_branch..HEAD 2>/dev/null || echo "0")
-    if [ "$behind" -gt 0 ]; then
-        echo "  Pulling $behind commit(s)..."
-        git pull --ff-only
-    fi
-    if [ "$ahead" -gt 0 ]; then
-        echo "  ⚠️ $ahead unpushed commit(s)"
-    fi
-    if [ "$behind" -eq 0 ] && [ "$ahead" -eq 0 ]; then
-        echo "  ✓ Up to date"
-    fi
-else
-    echo "  ⚠️ Uncommitted changes - skipping pull"
-fi
+Display as bullet list of what was done.
 
-# Sync submodules if present
-if [ -f .gitmodules ]; then
-    echo "  Syncing submodules..."
-    git submodule update --remote --merge 2>/dev/null
-fi
-```
+### 3. Today's Plan
 
-### 3. Yesterday's Activity (Standup)
+Read these files (if they exist):
+- `.project/context/focus.json` - current focus, planned tasks
+- `.project/context/progress.md` - recent progress notes
 
-```bash
-echo ""
-echo "YESTERDAY (What I did)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+Display:
+- Current focus/epic/task
+- Planned tasks from `next_session_tasks`
+- Any in-progress items
 
-# Git commits in last 24 hours
-commits=$(git log --oneline --since="24 hours ago" --all 2>/dev/null)
-if [ -n "$commits" ]; then
-    echo "$commits" | while read line; do
-        echo "  • $line"
-    done
-else
-    echo "  (no commits in last 24h)"
-fi
+### 4. Blockers
 
-# Recently modified project files
-if [ -d ".project" ]; then
-    recent=$(find .project -name "*.md" -mtime -1 2>/dev/null | head -5)
-    if [ -n "$recent" ]; then
-        echo ""
-        echo "  Modified files:"
-        echo "$recent" | while read f; do
-            echo "    - $(basename $f)"
-        done
-    fi
-fi
-```
+Check for:
+- Tasks with `status: blocked` in `.project/epics/`
+- Merge conflicts (`.git/MERGE_HEAD` exists)
 
-### 4. Today's Plan (Current Focus + Next Tasks)
+Display blockers or "No blockers".
 
-```bash
-echo ""
-echo "TODAY (What I'll do)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+### 5. Quick Stats
 
-# Check focus state
-if [ -f ".project/context/focus.json" ]; then
-    current_focus=$(jq -r '.current_focus.name // empty' .project/context/focus.json 2>/dev/null)
-    if [ -n "$current_focus" ]; then
-        echo "  Current Focus: $current_focus"
-    fi
+Calculate and display:
+- Commits in last 24h (count)
+- Uncommitted changes (count)
+- Task counts if `.project/epics/` exists (open/active/done)
 
-    # Show next session tasks
-    next_tasks=$(jq -r '.next_session_tasks[]? // empty' .project/context/focus.json 2>/dev/null)
-    if [ -n "$next_tasks" ]; then
-        echo ""
-        echo "  Planned tasks:"
-        echo "$next_tasks" | while read task; do
-            echo "    • $task"
-        done
-    fi
-fi
+### 6. Issues
 
-# Find in-progress tasks from epics
-if [ -d ".project/epics" ]; then
-    in_progress=$(grep -rl "status:.*in_progress" .project/epics 2>/dev/null | head -3)
-    if [ -n "$in_progress" ]; then
-        echo ""
-        echo "  In-progress:"
-        echo "$in_progress" | while read f; do
-            title=$(grep "^# " "$f" | head -1 | sed 's/^# //')
-            echo "    • $title"
-        done
-    fi
-fi
-```
+Flag any problems:
+- Uncommitted changes
+- Unpushed commits
+- Merge in progress
 
-### 5. Blockers
+### 7. Session Ready
 
-```bash
-echo ""
-echo "BLOCKERS"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-blockers=0
-
-# Check for blocked tasks
-if [ -d ".project/epics" ]; then
-    blocked=$(grep -rl "status:.*blocked" .project/epics 2>/dev/null)
-    if [ -n "$blocked" ]; then
-        echo "$blocked" | while read f; do
-            title=$(grep "^# " "$f" | head -1 | sed 's/^# //')
-            echo "  ⚠️ $title"
-            blockers=$((blockers + 1))
-        done
-    fi
-fi
-
-# Check for merge conflicts
-if [ -f .git/MERGE_HEAD ]; then
-    echo "  ❌ Merge in progress - resolve conflicts"
-    blockers=$((blockers + 1))
-fi
-
-if [ "$blockers" -eq 0 ]; then
-    echo "  ✓ No blockers"
-fi
-```
-
-### 6. Quick Stats
-
-```bash
-echo ""
-echo "QUICK STATS"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-# Commit count (24h)
-commit_count=$(git log --oneline --since="24 hours ago" --all 2>/dev/null | wc -l)
-echo "  Commits (24h): $commit_count"
-
-# Uncommitted changes
-changes=$(git status --short | wc -l)
-echo "  Uncommitted changes: $changes"
-
-# Task counts if epics exist
-if [ -d ".project/epics" ]; then
-    open=$(grep -rl "status:.*open" .project/epics 2>/dev/null | wc -l)
-    in_prog=$(grep -rl "status:.*in_progress" .project/epics 2>/dev/null | wc -l)
-    done=$(grep -rl "status:.*done\|status:.*completed" .project/epics 2>/dev/null | wc -l)
-    echo "  Tasks: $open open | $in_prog active | $done done"
-fi
-```
-
-### 7. Issues & Warnings
-
-```bash
-echo ""
-echo "ISSUES"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-issues=0
-
-# Uncommitted changes
-if [ -n "$(git status --short)" ]; then
-    echo "  ⚠️ Uncommitted changes"
-    issues=$((issues + 1))
-fi
-
-# Unpushed commits
-ahead=$(git rev-list --count origin/$(git branch --show-current)..HEAD 2>/dev/null || echo "0")
-if [ "$ahead" -gt 0 ]; then
-    echo "  ⚠️ $ahead unpushed commit(s)"
-    issues=$((issues + 1))
-fi
-
-if [ "$issues" -eq 0 ]; then
-    echo "  ✓ No issues"
-fi
-```
-
-### 8. Session Ready
-
-```bash
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "SESSION READY"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-echo "Next Steps:"
-echo "  • '/next' - Continue or find next task"
-echo "  • '/focus' - Check/set current focus"
-echo "  • '/commit' - Commit pending changes"
-```
+Display next steps:
+- `/next` - Continue or find next task
+- `/focus` - Check/set current focus
+- `/commit` - Commit pending changes
 
 ## Output Format
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  START OF DAY - 2025-12-08
+START OF DAY - [date]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Repository: my-project
-Branch: main
+Repository: [name]
+Branch: [branch]
 
 REPOSITORY SYNC
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ✓ Up to date
+  [sync status - up to date / X ahead / X behind]
 
 YESTERDAY (What I did)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  • abc1234 feat: Add user authentication
-  • def5678 fix: Resolve login bug
+  • [commit or work item]
+  • [commit or work item]
 
 TODAY (What I'll do)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Current Focus: API Integration
+  Current Focus: [focus name]
 
   Planned tasks:
-    • Implement OAuth flow
-    • Add unit tests
+    • [task]
+    • [task]
 
 BLOCKERS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ✓ No blockers
+  [blockers or "No blockers"]
 
 QUICK STATS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Commits (24h): 2
-  Uncommitted changes: 0
-  Tasks: 3 open | 1 active | 5 done
+  Commits (24h): [count]
+  Uncommitted changes: [count]
+  Tasks: [open] open | [active] active | [done] done
 
 ISSUES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ✓ No issues
+  [issues or "No issues"]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SESSION READY
@@ -290,10 +137,8 @@ If user asks for copyable standup format:
 
 *Yesterday:*
 - [commit/work item]
-- [commit/work item]
 
 *Today:*
-- [planned task]
 - [planned task]
 
 *Blockers:*
@@ -304,9 +149,5 @@ If user asks for copyable standup format:
 
 - Combines session initialization with standup report
 - Syncs BEFORE loading context (ensures latest)
-- Shows yesterday's git commits and modified files
-- Displays today's plan from focus state and tasks
-- Highlights blockers clearly
-- Provides quick stats overview
-- Works with submodules
+- Uses Read tool for files, Bash for git commands
 - Triggers on both "sod" and "standup" keywords
