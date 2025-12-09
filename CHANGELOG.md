@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **`task-complete` skill** - Finalize tasks and update MindContext state
+  - Use after feature-dev completes or after direct implementation
+  - Verifies completion (tests pass, code committed, acceptance criteria)
+  - Updates task file, progress.md, epic status
+  - Suggests next available tasks
+  - Total skills: 23
 - **Permissions onboarding in `project-init`** - First-time setup guidance
   - Phase 0 checks if user has git permissions configured
   - Shows recommended permissions JSON for smooth workflow
@@ -19,6 +25,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Merged `standup-report` functionality into start-of-day
   - Triggers on "sod", "standup", "what did I do"
   - Cleaner output format with Yesterday/Today/Blockers sections
+- **`task-start` skill** - Added TDD integration with feature-dev
+  - Now offers THREE options for complex tasks:
+    1. feature-dev workflow (exploration + architecture + review)
+    2. feature-dev + TDD (same + test-first during implementation)
+    3. Implement directly (skip exploration/review)
+  - TDD option passes strict Red-Green-Refactor requirements to feature-dev Phase 5
+  - Declarative rewrite (no embedded bash scripts)
 
 ### Removed
 - **`standup-report` skill** - Merged into `start-of-day`

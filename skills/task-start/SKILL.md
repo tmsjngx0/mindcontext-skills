@@ -7,7 +7,7 @@ description: Begin work on a specific task with intelligent routing to feature-d
 
 Begin work on a specific task with smart execution routing.
 
-## Workflow
+## Workflow Overview
 
 ```
 task-start [number]
@@ -16,80 +16,52 @@ task-start [number]
     ├── 2. Load context (epic, PRD, design.md)
     ├── 3. Update focus state
     ├── 4. Assess complexity
-    │      ↓
+    │       ↓
     │   ┌──────────────────┐
-    │   │ Simple or Complex? │
+    │   │ Simple or Complex │
     │   └──────────────────┘
-    │      ↓           ↓
-    │   Simple      Complex
-    │      ↓           ↓
-    │   Implement   Recommend
-    │   directly    feature-dev
-    │      ↓           ↓
-    └──────────────────────────
+    │       ↓           ↓
+    │    Simple      Complex
+    │       ↓           ↓
+    │   Implement    Offer options:
+    │   directly     1. feature-dev
+    │       │        2. feature-dev + TDD
+    │       │        3. Implement directly
+    │       ↓           ↓
+    └───────────────────────
                ↓
          task-complete
 ```
 
 ---
 
-## Step 1: Find Task
+## Instructions
 
-Locate task file in `.project/epics/*/{number}.md`
+When triggered, perform these steps IN ORDER:
 
-```bash
-TASK_FILE=$(find .project/epics -name "${NUMBER}.md" -o -name "0${NUMBER}.md" -o -name "00${NUMBER}.md" 2>/dev/null | head -1)
+### 1. Find the Task
 
-if [ -z "$TASK_FILE" ]; then
-    echo "Task $NUMBER not found"
-    echo "Available tasks:"
-    find .project/epics -name "*.md" -not -name "epic.md" | sort
-    exit 1
-fi
-```
+Search for the task file in `.project/epics/*/`:
+- Look for `{number}.md`, `0{number}.md`, or `00{number}.md`
+- If not found, list available tasks and ask which one
 
----
+### 2. Load Context
 
-## Step 2: Load Context
+Read and understand:
+- **Task file** - title, description, acceptance criteria, status
+- **Epic file** - `epic.md` in same directory for architecture context
+- **PRD file** - `.project/prds/{epic}.md` if exists
+- **Design file** - `.project/design.md` if exists
 
-Read task and related context:
+### 3. Update Focus State
 
-```
-1. Task file: .project/epics/{epic}/{number}.md
-2. Epic file: .project/epics/{epic}/epic.md
-3. PRD file: .project/prds/{epic}.md (if exists)
-4. Design: .project/design.md (if exists)
-```
+Update `.project/context/focus.json` with:
+- `current_epic`: epic name (directory name)
+- `current_issue`: task number
+- `current_branch`: current git branch
+- `last_updated`: current timestamp
 
-Extract from task:
-- Title and description
-- Acceptance criteria
-- Dependencies
-- Current status
-
----
-
-## Step 3: Update Focus State
-
-```bash
-EPIC=$(dirname "$TASK_FILE" | xargs basename)
-ISSUE=$(basename "$TASK_FILE" .md)
-BRANCH=$(git branch --show-current 2>/dev/null || echo "main")
-
-# Update focus.json (in context/)
-cat > .project/context/focus.json << EOF
-{
-  "current_epic": "$EPIC",
-  "current_issue": "$ISSUE",
-  "current_branch": "$BRANCH",
-  "last_updated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-}
-EOF
-```
-
----
-
-## Step 4: Assess Complexity
+### 4. Assess Complexity
 
 **Simple Task (implement directly):**
 - Single file change
@@ -97,124 +69,136 @@ EOF
 - Documentation update
 - Configuration change
 - Test addition for existing code
-- Task explicitly marked `complexity: low`
+- Task marked `complexity: low`
 
-**Complex Task (recommend feature-dev):**
+**Complex Task (offer feature-dev):**
 - Touches 3+ files
 - Requires understanding existing patterns
 - New feature integration
 - Architectural decisions needed
-- Task mentions "design", "refactor", "integrate", "new system"
-- Task explicitly marked `complexity: high`
-- Acceptance criteria has 5+ items
+- Contains "design", "refactor", "integrate", "new system"
+- Task marked `complexity: high`
+- Has 5+ acceptance criteria items
 
-**Complexity heuristics:**
-```
-Check task file for:
-- Files listed in task > 2 → complex
-- "refactor" in description → complex
-- "integrate" in description → complex
-- "new" + "system/service/module" → complex
-- acceptance_criteria count > 4 → complex
-```
+### 5. Present Options Based on Complexity
 
----
-
-## Step 5a: Simple Task → Implement Directly
+#### For Simple Tasks:
 
 ```
-"This is a straightforward task. Starting implementation..."
+Task: {title}
+Files: {file list}
+Complexity: Simple
 
-1. Update task status to in_progress
-2. Read relevant files
-3. Make changes
-4. Run tests
-5. Mark complete (trigger task-complete)
+Starting implementation...
 ```
 
----
+Then implement directly, run tests, and invoke `task-complete`.
 
-## Step 5b: Complex Task → Recommend feature-dev
+#### For Complex Tasks:
+
+Present THREE options:
 
 ```
-"This task involves [reason]. I recommend using feature-dev for:
+Task: {title}
+Files: {file list}
+Complexity: High - {reason}
 
-✓ Codebase exploration (understand existing patterns)
-✓ Architecture design (plan the approach)
-✓ Quality review (catch issues early)
+This task would benefit from structured development:
 
 Options:
-1. Use feature-dev workflow (recommended)
-2. Implement directly (skip exploration/review)
-"
+1. feature-dev workflow (recommended)
+   → Exploration, architecture, implementation, review
+
+2. feature-dev + TDD (strictest)
+   → Same as #1, but with test-first during implementation
+
+3. Implement directly
+   → Skip exploration/review phases
 ```
 
-**If user chooses feature-dev:**
+### 6. Execute Based on User Choice
 
-Prepare context handoff:
+#### Option 1: feature-dev workflow
 
-```markdown
-## Task: [title]
-
-### From Epic ([epic-name]):
-[relevant architecture sections]
-
-### From PRD:
-[relevant requirements]
-
-### Task Details:
-[full task content]
-
-### Acceptance Criteria:
-[from task file]
-```
-
-Then launch:
+Prepare context and launch:
 
 ```
-/feature-dev [task title]
+/feature-dev:feature-dev {task title}
 
-Context:
-[prepared context above]
+## Context from MindContext
+
+### Task
+{task content}
+
+### From Epic ({epic-name})
+{relevant architecture sections}
+
+### From PRD
+{relevant requirements}
+
+### Acceptance Criteria
+{from task file}
 ```
 
-feature-dev will:
-- Skip most of Phase 1 (context already provided)
-- Run Phase 2: Codebase exploration
-- Run Phase 3: Clarifying questions (check PRD/Epic first)
-- Run Phase 4: Architecture design
-- Run Phase 5: Implementation
-- Run Phase 6: Quality review
-- Run Phase 7: Summary
+#### Option 2: feature-dev + TDD
+
+Same as Option 1, but include TDD instruction:
+
+```
+/feature-dev:feature-dev {task title}
+
+## Context from MindContext
+
+### Task
+{task content}
+
+### From Epic ({epic-name})
+{relevant architecture sections}
+
+### From PRD
+{relevant requirements}
+
+### Acceptance Criteria
+{from task file}
+
+### TDD Requirement
+During Phase 5 (Implementation), use strict TDD:
+1. Before writing any implementation code, write a failing test
+2. Run the test - verify it fails
+3. Write minimal code to make the test pass
+4. Run the test - verify it passes
+5. Refactor if needed
+6. Repeat for each behavior
+
+Use the project's test framework. Commit after each Green phase.
+```
+
+#### Option 3: Implement directly
+
+Update task status to `in_progress`, then:
+1. Read relevant files
+2. Make changes
+3. Run tests
+4. Invoke `task-complete`
+
+### 7. Update Task Status
+
+When starting any path, update the task file:
+- Change `status:` to `in_progress`
+- Add `started:` timestamp if not present
 
 ---
 
-## Step 6: Update Task Status
+## After feature-dev Completes
 
-When starting (either path):
+When feature-dev Phase 7 (Summary) is done:
 
-```bash
-# Update frontmatter in task file
-sed -i 's/status: .*/status: in_progress/' "$TASK_FILE"
-
-# Add started timestamp if not present
-if ! grep -q "started:" "$TASK_FILE"; then
-    sed -i "/^---$/a started: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$TASK_FILE"
-fi
-```
-
----
-
-## After Completion
-
-When task is done (either path), trigger `task-complete`:
-
-```
-1. Mark task as done
-2. Update progress.md
-3. Update epic progress
-4. Suggest next task
-```
+1. Capture the implementation summary
+2. Invoke `task-complete` to:
+   - Mark task as done
+   - Update progress.md
+   - Update epic progress
+   - Suggest next task
 
 ---
 
@@ -222,16 +206,17 @@ When task is done (either path), trigger `task-complete`:
 
 | Situation | Action |
 |-----------|--------|
-| Task not found | List available tasks |
+| Task not found | List available tasks from `.project/epics/` |
 | Dependencies not met | Show blockers, suggest completing them first |
-| Already in progress | "Continue working on this task?" |
-| Already complete | "Task done. Reopen or work on next task?" |
+| Already in progress | Ask "Continue working on this task?" |
+| Already complete | Ask "Task done. Reopen or work on next task?" |
 
 ---
 
 ## Examples
 
 ### Simple Task
+
 ```
 User: start task 003
 
@@ -242,10 +227,11 @@ Files: src/components/LoginForm.tsx
 Complexity: Simple (single file, clear scope)
 
 Starting implementation...
-[implements directly]
+[implements directly, runs tests, invokes task-complete]
 ```
 
 ### Complex Task
+
 ```
 User: start task 001
 
@@ -253,36 +239,61 @@ Claude: Loading task 001 from epic "user-auth"...
 
 Task: Implement OAuth provider abstraction
 Files: Multiple (src/auth/*, src/middleware/*, tests/*)
-Complexity: High (5 files, new system, integration)
+Complexity: High - new system with 5+ acceptance criteria
 
-This task involves creating a new authentication system.
-I recommend using feature-dev for:
-
-✓ Codebase exploration (understand existing auth patterns)
-✓ Architecture design (plan OAuth integration)
-✓ Quality review (security-sensitive code)
+This task would benefit from structured development:
 
 Options:
-1. Use feature-dev workflow (recommended)
-2. Implement directly
+1. feature-dev workflow (recommended)
+   → Exploration, architecture, implementation, review
 
-User: 1
+2. feature-dev + TDD (strictest)
+   → Same as #1, but with test-first during implementation
 
-Claude: Preparing context for feature-dev...
-[launches /feature-dev with context]
+3. Implement directly
+   → Skip exploration/review phases
+
+User: 2
+
+Claude: Launching feature-dev with TDD requirement...
+
+/feature-dev:feature-dev Implement OAuth provider abstraction
+
+## Context from MindContext
+
+### Task
+[full task content]
+
+### From Epic (user-auth)
+[architecture sections]
+
+### Acceptance Criteria
+- OAuth provider interface defined
+- Google provider implemented
+- Token refresh handling
+- Unit tests for all providers
+- Integration test for auth flow
+
+### TDD Requirement
+During Phase 5 (Implementation), use strict TDD...
 ```
 
 ---
 
-## Integration Notes
+## Integration Points
 
 ### With feature-dev
-- MindContext provides: task context, PRD, epic architecture
-- feature-dev provides: exploration, implementation, review
-- Result flows back to MindContext for tracking
+- **MindContext provides:** task context, PRD, epic architecture, TDD requirements
+- **feature-dev provides:** exploration, architecture, implementation, review
+- **Result flows back** to MindContext via task-complete
+
+### With tdd-agent
+- When Option 2 is chosen, TDD instructions guide implementation
+- Can also spawn `tdd-agent` directly for stricter enforcement
+- tdd-agent handles Red-Green-Refactor cycles
 
 ### With task-complete
-- After feature-dev Phase 7 completes
-- Update task status to done
-- Update progress tracking
-- Suggest next task
+- Invoked after implementation (any path)
+- Updates task status to done
+- Updates progress tracking
+- Suggests next task
