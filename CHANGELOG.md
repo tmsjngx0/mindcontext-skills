@@ -32,6 +32,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     3. Implement directly (skip exploration/review)
   - TDD option passes strict Red-Green-Refactor requirements to feature-dev Phase 5
   - Declarative rewrite (no embedded bash scripts)
+- **`project-init` skill** - Added reference research phase
+  - Phase 2.5: Research flow for studying reference projects
+  - Detects when user wants to study existing project (fork, study patterns)
+  - Uses plan mode with Explore/Plan agents for architecture analysis
+  - Saves research to `.project/spikes/reference-{name}.md` (NOT Claude's internal files)
+  - Handles large repo clones (shallow clone option, background processing)
+  - Rejection handling: asks why if user rejects design.md, offers alternatives
+  - Research spike template for documenting patterns and recommendations
 
 ### Removed
 - **`standup-report` skill** - Merged into `start-of-day`

@@ -24,12 +24,22 @@ project-init
     ├── 2. Detect project type (greenfield vs brownfield)
     ├── 3. Create directory structure
     ├── 4. Create config files
-    ├── 5. Create CLAUDE.md
+    ├── 5. Create CLAUDE.md (template)
     ├── 6. Create .gitattributes
     │
     ├── 7. PROJECT DISCOVERY (brainstorming)
     │      ↓
     │   Conversational questions (one at a time)
+    │      ↓
+    │   User mentions reference project?
+    │      ↓
+    │   ┌─────────────────────────────┐
+    │   │  RESEARCH PHASE (optional)  │
+    │   │  - Clone reference repo     │
+    │   │  - Use plan mode + agents   │
+    │   │  - Save to .project/spikes/ │
+    │   │  - Resume brainstorming     │
+    │   └─────────────────────────────┘
     │      ↓
     │   Creates .project/design.md
     │
@@ -348,6 +358,149 @@ Does this look right? Any adjustments?"
 
 ---
 
+## Phase 2.5: Reference Research (Optional)
+
+**IMPORTANT:** If user wants to study a reference project before finalizing design, handle it properly.
+
+### Detecting Research Request
+
+During brainstorming (especially Q5: Tech Stack), user might say:
+- "Can we fork/study [project]?"
+- "I want to follow [project]'s patterns"
+- "Let's look at how [project] does it"
+- "Study [project] architecture first"
+
+### Research Flow
+
+When research is requested:
+
+```
+1. Pause brainstorming (note what we've captured so far)
+      ↓
+2. Set up reference project
+   - Create _reference/ directory (add to .gitignore)
+   - Clone as submodule OR shallow clone:
+     git clone --depth 1 [url] _reference/[name]
+      ↓
+3. Enter plan mode for research
+   - Use Explore agents to analyze architecture
+   - Use Plan agents to document patterns
+      ↓
+4. Save research to .project/spikes/
+   - Create .project/spikes/reference-[name].md
+   - Document: architecture, patterns, key files, decisions
+      ↓
+5. Exit plan mode
+      ↓
+6. Resume brainstorming with research context
+   - "Based on [project] analysis, I recommend..."
+   - Continue to design.md creation
+```
+
+### Research Output Location
+
+**CRITICAL:** All research artifacts go in the PROJECT, not Claude's internal files.
+
+| Content | Location | NOT |
+|---------|----------|-----|
+| Architecture analysis | `.project/spikes/reference-{name}.md` | `~/.claude/plans/` |
+| Pattern documentation | `.project/spikes/reference-{name}.md` | Claude memory |
+| Final design | `.project/design.md` | `~/.claude/plans/` |
+
+### Research Spike Template
+
+Save to `.project/spikes/reference-{name}.md`:
+
+```markdown
+---
+name: {project-name} Architecture Analysis
+type: reference-research
+source: {github-url}
+analyzed: {timestamp}
+---
+
+# {Project} Architecture Reference
+
+## Overview
+[What the project does, why we're studying it]
+
+## Project Structure
+```
+{key directories and their purposes}
+```
+
+## Key Patterns
+
+### Pattern 1: [Name]
+- **Where:** [files/directories]
+- **How it works:** [description]
+- **Adopt for our project:** [yes/no/modified]
+
+### Pattern 2: [Name]
+...
+
+## Technology Stack
+| Layer | Their Choice | Our Consideration |
+|-------|--------------|-------------------|
+| Backend | [X] | [same/different + why] |
+| Frontend | [X] | [same/different + why] |
+| Database | [X] | [same/different + why] |
+
+## Key Files to Study
+- `path/to/file.cs` - [why important]
+- `path/to/other.cs` - [why important]
+
+## Recommendations for Our Project
+1. [Adopt X pattern because...]
+2. [Simplify Y because...]
+3. [Skip Z because...]
+
+## Open Questions
+- [Question needing user input]
+```
+
+### Handling Long Clones
+
+For large repositories (like Sonarr ~400MB):
+
+```
+"This repository is large. Options:
+
+1. Shallow clone (faster, latest code only)
+   git clone --depth 1 [url]
+
+2. Full clone (slower, complete history)
+   git clone [url]
+
+3. Skip clone, I'll browse GitHub directly
+   (Use WebFetch to analyze key files)
+
+Which do you prefer?"
+```
+
+If clone takes time:
+- Run in background
+- Continue brainstorming other questions
+- Return to research when clone completes
+
+### After Research Completes
+
+```
+"Research complete! I've documented [project]'s architecture in:
+  .project/spikes/reference-{name}.md
+
+Key findings:
+- [Pattern 1] - recommend adopting
+- [Pattern 2] - recommend simplifying
+- [Pattern 3] - recommend skipping
+
+Based on this research, let me update my recommendations...
+
+[Continue with remaining brainstorming questions or proceed to design.md]"
+```
+
+---
+
 ## Phase 3: Create Design Document (Step 8)
 
 Create `.project/design.md`:
@@ -407,6 +560,24 @@ created: [timestamp]
 ## Success Criteria
 - [Inferred from problem/features]
 ```
+
+### If User Rejects design.md
+
+If the user rejects the design document write, don't abandon - ask why:
+
+```
+"You rejected the design document. What would you like to change?
+
+1. Adjust the content (tell me what to change)
+2. Do more research first (study a reference project)
+3. Start over with different direction
+4. Skip design.md for now (not recommended)"
+```
+
+**Option 1:** Ask what to change, update, try again.
+**Option 2:** Enter research phase (Phase 2.5), then return.
+**Option 3:** Restart brainstorming from Q1.
+**Option 4:** Proceed without design.md (warn about missing foundation).
 
 ---
 
