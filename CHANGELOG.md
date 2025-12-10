@@ -13,7 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Verifies completion (tests pass, code committed, acceptance criteria)
   - Updates task file, progress.md, epic status
   - Suggests next available tasks
-  - Total skills: 23
+- **`plugin-update` skill** - Update MindContext plugin to latest version
+  - Triggers on "update plugin", "update mindcontext", "upgrade plugin"
+  - Shows current vs latest version and changelog summary
+  - Handles both marketplace and local installations
+  - Includes troubleshooting for common issues
+  - Total skills: 24
 - **Permissions onboarding in `project-init`** - First-time setup guidance
   - Phase 0 checks if user has git permissions configured
   - Shows recommended permissions JSON for smooth workflow
