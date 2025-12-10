@@ -40,6 +40,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Handles large repo clones (shallow clone option, background processing)
   - Rejection handling: asks why if user rejects design.md, offers alternatives
   - Research spike template for documenting patterns and recommendations
+- **`update-context` skill** - Clarified file location rules
+  - `context/` folder should ONLY contain `focus.json` and `progress.md`
+  - New content goes to `spikes/` (research) or `plans/` (technical docs)
+  - Added explicit "DO NOT create additional files in context/" guidance
 
 ### Removed
 - **`standup-report` skill** - Merged into `start-of-day`

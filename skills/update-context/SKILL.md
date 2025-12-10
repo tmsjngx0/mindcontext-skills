@@ -218,12 +218,31 @@ This ensures continuity across memory boundaries.
 
 ## Context File Locations
 
+**CRITICAL:** The `context/` folder should ONLY contain these two files:
+
 | File | Purpose |
 |------|---------|
 | `.project/context/focus.json` | Current work focus (machine-readable) |
 | `.project/context/progress.md` | Progress narrative (human-readable) |
-| `.project/spikes/*.md` | Research artifacts |
-| `.project/plans/*.md` | Technical plans |
+
+**DO NOT create additional files in `.project/context/`**
+
+If you need to save new content:
+
+| Content Type | Save To | NOT |
+|--------------|---------|-----|
+| Research findings | `.project/spikes/{topic}.md` | `.project/context/` |
+| Technical plans | `.project/plans/{name}.md` | `.project/context/` |
+| Architecture docs | `.project/plans/{name}.md` | `.project/context/` |
+| Session notes | Append to `progress.md` | New file in context/ |
+| Decisions | Update `focus.json` | New file in context/ |
+
+### Why This Matters
+
+- `context/` is for **state tracking** (2 files only)
+- `spikes/` is for **research artifacts** (any number of files)
+- `plans/` is for **technical documents** (any number of files)
+- Random files in `context/` clutters the tracking system
 
 ## Error Handling
 
