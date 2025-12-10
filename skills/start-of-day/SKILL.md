@@ -44,8 +44,16 @@ Read these files (if they exist):
 - `.project/context/focus.json` - current focus, planned tasks
 - `.project/context/progress.md` - recent progress notes
 
+**Handle multiple focuses:**
+
+Check focus.json for `active_focuses` array. If multiple focuses exist:
+- Display all active focuses with their priority (P1/P2/P3)
+- Mark the `current_focus` with → arrow
+- Show phase/status for each
+
 Display:
-- Current focus/epic/task
+- All active focuses (if multiple)
+- Current focus highlighted
 - Planned tasks from `next_session_tasks`
 - Any in-progress items
 
@@ -98,7 +106,10 @@ YESTERDAY (What I did)
 
 TODAY (What I'll do)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Current Focus: [focus name]
+  Active Focuses: [count]
+  → [current focus name] (P1)
+    [other focus 1] (P2)
+    [other focus 2] (P3)
 
   Planned tasks:
     • [task]

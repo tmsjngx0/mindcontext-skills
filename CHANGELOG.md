@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-12-10
+
 ### Added
 - **`task-complete` skill** - Finalize tasks and update MindContext state
   - Use after feature-dev completes or after direct implementation
@@ -23,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Phase 0 checks if user has git permissions configured
   - Shows recommended permissions JSON for smooth workflow
   - Offers to merge into `~/.claude/settings.json`
+- **Multi-focus support** - Track multiple active work streams simultaneously
+  - `focus.json` now supports `active_focuses` array with priorities (P1/P2/P3)
+  - `update-context` detects multiple sessions via git worktrees, recent branches
+  - `start-of-day` displays all active focuses with current highlighted
+  - Switch between focuses without losing context
 
 ### Changed
 - **`start-of-day` skill rewritten** - Now declarative instead of procedural
@@ -30,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Merged `standup-report` functionality into start-of-day
   - Triggers on "sod", "standup", "what did I do"
   - Cleaner output format with Yesterday/Today/Blockers sections
+  - Shows all active focuses if multiple exist
 - **`task-start` skill** - Added TDD integration with feature-dev
   - Now offers THREE options for complex tasks:
     1. feature-dev workflow (exploration + architecture + review)
@@ -45,10 +53,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Handles large repo clones (shallow clone option, background processing)
   - Rejection handling: asks why if user rejects design.md, offers alternatives
   - Research spike template for documenting patterns and recommendations
-- **`update-context` skill** - Clarified file location rules
+- **`update-context` skill** - Enhanced for multi-session workflows
   - `context/` folder should ONLY contain `focus.json` and `progress.md`
   - New content goes to `spikes/` (research) or `plans/` (technical docs)
   - Added explicit "DO NOT create additional files in context/" guidance
+  - Detects multiple work streams (worktrees, branches, existing focuses)
+  - Asks which focuses to track when multiple detected
 
 ### Removed
 - **`standup-report` skill** - Merged into `start-of-day`

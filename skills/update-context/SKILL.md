@@ -37,7 +37,35 @@ What should I capture from this session?
 5. Custom (you specify)
 ```
 
-### Phase 2: Update Focus State
+### Phase 2: Detect Active Sessions
+
+**Check for multiple active work streams:**
+
+1. **Git worktrees** - Multiple branches checked out simultaneously
+   ```bash
+   git worktree list
+   ```
+
+2. **Recent branches** - Branches with recent commits
+   ```bash
+   git for-each-ref --sort=-committerdate --count=5 --format='%(refname:short) %(committerdate:relative)' refs/heads/
+   ```
+
+3. **Existing focuses** - Check current focus.json for active_focuses array
+
+4. **Open editor sessions** - Check for .vscode/workspace or similar markers
+
+**Ask user if multiple sessions detected:**
+```
+I detected multiple active work streams:
+1. [branch/focus 1] - last active [time]
+2. [branch/focus 2] - last active [time]
+3. [branch/focus 3] - last active [time]
+
+Which focuses should I track? (comma-separated, or 'all')
+```
+
+### Phase 3: Update Focus State
 
 **Update `.project/context/focus.json`:**
 ```bash
@@ -48,23 +76,30 @@ mkdir -p .project/context
 cat .project/context/focus.json 2>/dev/null || echo "{}"
 ```
 
-**Focus structure:**
+**Focus structure (supports multiple focuses):**
 ```json
 {
-  "current_focus": {
-    "type": "plan|epic|task|research",
-    "name": "Description of current work",
-    "path": "Path to relevant file",
-    "started": "YYYY-MM-DD",
-    "phase": "Current phase"
-  },
+  "active_focuses": [
+    {
+      "id": "unique-slug",
+      "type": "plan|epic|task|research",
+      "name": "Description of current work",
+      "project": "Project name (if multi-project)",
+      "path": "Path to relevant file",
+      "started": "YYYY-MM-DD",
+      "phase": "Current phase",
+      "priority": 1,
+      "last_active": "YYYY-MM-DDTHH:MM:SSZ"
+    }
+  ],
+  "current_focus": "unique-slug",
   "context_files": {
     "key": "path/to/file"
   },
   "key_decisions": {
     "topic": "decision made"
   },
-  "next_steps": [
+  "next_session_tasks": [
     "Step 1",
     "Step 2"
   ],
@@ -72,7 +107,21 @@ cat .project/context/focus.json 2>/dev/null || echo "{}"
 }
 ```
 
-### Phase 3: Update Progress File
+**Managing multiple focuses:**
+
+| Action | Behavior |
+|--------|----------|
+| Add new focus | Append to `active_focuses`, set as `current_focus` |
+| Switch focus | Update `current_focus` to different id |
+| Complete focus | Remove from `active_focuses` array |
+| Pause focus | Keep in array but switch `current_focus` to another |
+
+**Priority levels:**
+- 1 = Primary (main work)
+- 2 = Secondary (parallel track)
+- 3 = Background (monitoring/waiting)
+
+### Phase 4: Update Progress File
 
 **Update `.project/context/progress.md`:**
 
@@ -117,7 +166,7 @@ cat .project/context/focus.json 2>/dev/null || echo "{}"
 - [question or blocker]
 ```
 
-### Phase 4: Capture Research (if applicable)
+### Phase 5: Capture Research (if applicable)
 
 If research was conducted, ensure it's saved:
 
@@ -136,7 +185,7 @@ Research conducted this session:
 Save to .project/spikes/[name].md? (y/n)
 ```
 
-### Phase 5: Git Status Check
+### Phase 6: Git Status Check
 
 ```bash
 # Show what's changed
@@ -158,7 +207,7 @@ Options:
 3. Show diff first
 ```
 
-### Phase 6: Summary Output
+### Phase 7: Summary Output
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -170,20 +219,26 @@ Options:
 [✓ Research saved: .project/spikes/[name].md]
 [✓ Changes committed]
 
-CURRENT FOCUS
+ACTIVE FOCUSES ([count])
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[type]: [name]
-Phase: [current phase]
+→ [current] [name] (P[priority])
+  [type]: [phase]
+
+  [other 1] [name] (P[priority])
+  [type]: [phase]
+
+  [other 2] [name] (P[priority])
+  [type]: [phase]
 
 KEY DECISIONS CAPTURED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • [decision 1]
 • [decision 2]
 
-NEXT STEPS
+NEXT SESSION TASKS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. [step 1]
-2. [step 2]
+1. [task 1]
+2. [task 2]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Ready to clear memory and run prime-context
