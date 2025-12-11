@@ -268,12 +268,27 @@ For complex tasks (3+ files, new integrations), use feature-dev plugin:
 **IMPORTANT:** Tasks are `001.md`, `002.md` directly in epic folder.
 NOT `tasks/001-task-name.md` or any other format.
 
-## Workflow
-1. Design: `.project/design.md` (project vision)
-2. PRD: "create prd [feature]" → `.project/prds/`
-3. Epic: "create epic [feature]" → `.project/epics/`
-4. Tasks: "plan epic [feature]" → task breakdown
-5. Work: "start task [number]" or `/feature-dev [task]`
+## Workflow - USE MINDCONTEXT SKILLS
+**IMPORTANT:** Always use MindContext skills for project management. Do NOT improvise your own structure.
+
+| User Request | Say This (triggers skill) | Result |
+|--------------|---------------------------|--------|
+| "Let's plan X" | "create prd X" | `.project/prds/X.md` |
+| "Design X feature" | "create epic X" | `.project/epics/X/epic.md` |
+| "Break down X" | "plan epic X" | `.project/epics/X/001.md`, `002.md` |
+| "Work on task" | "start task 1" | Updates focus, begins work |
+
+**Standard flow:**
+1. `create prd [feature]` → `.project/prds/{feature}.md`
+2. `create epic [feature]` → `.project/epics/{feature}/epic.md`
+3. `plan epic [feature]` → `.project/epics/{feature}/001.md`, `002.md`, etc.
+4. `start task [number]` or `/feature-dev [task]`
+
+**DO NOT:**
+- Create `/tasks/` subfolders
+- Use `001-task-name.md` naming
+- Improvise project management structures
+- Skip the PRD → Epic → Tasks flow
 
 ## Testing
 [Detect or ask: pytest, jest, cargo test, etc.]
