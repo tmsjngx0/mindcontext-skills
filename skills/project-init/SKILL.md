@@ -217,13 +217,26 @@ See `.project/design.md` for full project vision and feature roadmap.
 
 ### File Organization - Use .project/ Structure
 All project management files go in `.project/`:
-- PRDs → `.project/prds/`
-- Epics (implementation plans + tasks) → `.project/epics/`
-- Plans (architecture, migration, integration plans) → `.project/plans/`
-- Research/spikes → `.project/spikes/`
-- Progress/focus → `.project/context/`
+- PRDs → `.project/prds/{feature-name}.md`
+- Epics → `.project/epics/{feature-name}/epic.md`
+- Tasks → `.project/epics/{feature-name}/001.md`, `002.md`, etc.
+- Plans → `.project/plans/{plan-name}.md`
+- Research/spikes → `.project/spikes/{topic}.md`
+- Progress/focus → `.project/context/progress.md`, `focus.json`
 
-**NEVER create:** `doc/`, `docs/`, `docs/plans/`, `design/`, `planning/`
+**EXACT epic/task structure (MUST follow):**
+```
+.project/epics/{feature-name}/
+├── epic.md       # Architecture and implementation plan
+├── 001.md        # Task 1 (NOT 001-task-name.md)
+├── 002.md        # Task 2
+└── 003.md        # Task 3
+```
+
+**NEVER create:**
+- `epics/{name}/tasks/` subfolder - tasks go directly in epic folder
+- `001-task-name.md` format - use `001.md` only
+- `doc/`, `docs/`, `docs/plans/`, `design/`, `planning/` folders
 
 ### Task Execution
 For complex tasks (3+ files, new integrations), use feature-dev plugin:
@@ -233,19 +246,27 @@ For complex tasks (3+ files, new integrations), use feature-dev plugin:
 ## MindContext Structure
 ```
 .project/
-├── design.md       # Project vision and feature roadmap
-├── prds/           # Feature requirements
-├── epics/          # Implementation plans + tasks per feature
-│   └── {feature}/
-│       ├── epic.md # Architecture/implementation plan
-│       └── 001.md  # Task/issue
-├── plans/          # Technical plans outside PRD→Epic flow
-│                   # (architecture, migration, integration, refactor plans)
-├── spikes/         # Research, experiments, exploration
-└── context/        # Progress tracking and focus state
-    ├── progress.md
-    └── focus.json
+├── design.md                    # Project vision and feature roadmap
+├── config.json                  # Project settings
+├── prds/
+│   └── {feature-name}.md        # PRD files (one per feature)
+├── epics/
+│   └── {feature-name}/          # One folder per epic
+│       ├── epic.md              # Architecture/implementation plan
+│       ├── 001.md               # Task 1 (simple numbering)
+│       ├── 002.md               # Task 2
+│       └── 003.md               # Task 3
+├── plans/                       # Technical plans (not PRD-driven)
+│   └── {plan-name}.md
+├── spikes/                      # Research, experiments
+│   └── {topic}.md
+└── context/
+    ├── progress.md              # Session progress
+    └── focus.json               # Current focus state
 ```
+
+**IMPORTANT:** Tasks are `001.md`, `002.md` directly in epic folder.
+NOT `tasks/001-task-name.md` or any other format.
 
 ## Workflow
 1. Design: `.project/design.md` (project vision)
