@@ -207,10 +207,13 @@ See `.project/design.md` for full project vision and feature roadmap.
 
 ## CRITICAL RULES
 
-### Git Commits - No AI Attribution
-- Do NOT include AI attribution in commit messages
-- No "Generated with Claude Code" or "Co-Authored-By: Claude" footers
-- Keep commit messages clean and professional
+### Git Commits - NO AI ATTRIBUTION
+**IMPORTANT:** Never add AI-generated footers to git commit messages:
+- NO "Generated with Claude Code" footer
+- NO "Co-Authored-By: Claude" or similar
+- NO AI attribution of any kind
+- Keep commit messages clean, professional, human-authored style
+- Just describe the change, nothing else
 
 ### File Organization - Use .project/ Structure
 All project management files go in `.project/`:
