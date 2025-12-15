@@ -118,6 +118,30 @@ Next steps:
 3. Start work: "start epic {name}"
 ```
 
+## IMPORTANT: File Location (Shadow Engineering)
+
+**Management files ALWAYS go in the parent repo**, even when working in a worktree.
+
+```
+✅ CORRECT: Parent repo
+   /project-root/.project/epics/{name}/epic.md
+
+❌ WRONG: Inside worktree/submodule
+   /project-root/worktrees/submodule-worktree/.project/epics/...
+   /project-root/submodule/.project/epics/...
+```
+
+**If `focus.json` shows an active worktree:**
+```json
+"active_worktree": "worktrees/some-worktree/"
+```
+
+This means:
+- **Code changes** → Go in the worktree (skills/, hooks/, src/)
+- **Management files** → Stay in parent repo (.project/prds/, .project/epics/)
+
+**Before creating epic.md, verify you're in the project root, NOT a worktree.**
+
 ## Notes
 
 - Architect agent already exists (agents/architect-agent.md)

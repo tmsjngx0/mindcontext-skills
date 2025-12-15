@@ -118,6 +118,30 @@ Sequential deps: Z
 Next: "Work on task 1" or "Sync to GitHub"
 ```
 
+## IMPORTANT: File Location (Shadow Engineering)
+
+**Task files ALWAYS go in the parent repo**, even when working in a worktree.
+
+```
+✅ CORRECT: Parent repo
+   /project-root/.project/epics/{name}/001.md
+   /project-root/.project/epics/{name}/002.md
+
+❌ WRONG: Inside worktree/submodule
+   /project-root/worktrees/submodule-worktree/.project/epics/...
+```
+
+**If `focus.json` shows an active worktree:**
+```json
+"active_worktree": "worktrees/some-worktree/"
+```
+
+This means:
+- **Code changes** → Go in the worktree
+- **Task files** → Stay in parent repo's `.project/epics/`
+
+**Before creating task files, verify you're in the project root, NOT a worktree.**
+
 ## Notes
 
 - Tasks numbered 001, 002, etc.

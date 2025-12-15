@@ -291,6 +291,26 @@ NOT `tasks/001-task-name.md` or any other format.
 - Improvise project management structures
 - Skip the PRD → Epic → Tasks flow
 
+## Shadow Engineering - File Locations
+
+If this project uses worktrees or submodules, follow these rules:
+
+| File Type | Location | Example |
+|-----------|----------|---------|
+| PRDs, Epics, Tasks | **Parent repo** `.project/` | `.project/epics/feature/001.md` |
+| Code (skills, hooks, src) | **Worktree/submodule** | `worktrees/feature-branch/skills/...` |
+| Context (focus.json, progress.md) | **Parent repo** `.project/context/` | `.project/context/focus.json` |
+
+**CRITICAL:** When `focus.json` shows an active worktree:
+```json
+"code_worktree": "worktrees/some-branch/"
+```
+
+- **Management files** (.project/) → Parent repo root
+- **Code changes** → The worktree path
+
+**NEVER create `.project/` folders inside worktrees or submodules.**
+
 ## Testing
 [Detect or ask: pytest, jest, cargo test, etc.]
 
