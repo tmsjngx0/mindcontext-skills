@@ -91,6 +91,32 @@ git add .project/context/*.md
 git diff --cached --quiet || git commit -m "Update context at end of day"
 ```
 
+### Phase 4b: Context File Health Check
+
+Check if context files are getting large:
+```bash
+# Check progress.md line count
+progress_lines=$(wc -l < .project/context/progress.md 2>/dev/null || echo "0")
+
+# Check session count
+session_count=$(grep -cE "^## Session|^### [0-9]{4}-[0-9]{2}-[0-9]{2}" .project/context/progress.md 2>/dev/null || echo "0")
+```
+
+**If progress.md > 150 lines OR > 10 sessions:**
+```
+💡 CONTEXT FILE MAINTENANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+progress.md is growing large ({n} lines, {n} sessions)
+
+Consider running: "compact context"
+→ Archives old sessions to .project/context/archive/
+→ Keeps progress.md slim and focused
+```
+
+**If already compact (<100 lines):**
+Skip this message entirely.
+
 ### Phase 5: Final Summary
 
 ```

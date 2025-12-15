@@ -91,6 +91,48 @@ If epic has progress tracking in `epic.md`, update it:
 - Completed: {n}/{total} tasks ({percentage}%)
 ```
 
+### 5b. Tidy Epic File (if needed)
+
+**Goal:** Keep epic.md focused on remaining work as tasks complete.
+
+**When to tidy:**
+- epic.md exceeds ~120 lines
+- More than 3 tasks now complete
+- Verbose completed task details exist inline in epic.md
+
+**What to archive:**
+If epic.md contains detailed descriptions of completed tasks (beyond the task table), move them to:
+```
+.project/context/archive/epics/{epic-name}/completed-tasks.md
+```
+
+**Archive format:**
+```markdown
+# Completed Tasks - {epic-name}
+
+## Task 001: {title}
+Completed: {date}
+
+{original detailed description from epic.md}
+
+---
+
+## Task 002: {title}
+...
+```
+
+**Keep in epic.md:**
+- Frontmatter
+- Technical Overview (architecture summary)
+- Task status table (compact)
+- Active phase details
+- Remaining task context
+
+**Don't tidy if:**
+- epic.md is under 100 lines (already compact)
+- No verbose completed task content exists
+- Epic just started (need the planning context)
+
 ### 6. Git Sync (Optional)
 
 If GitHub integration is configured:
@@ -271,3 +313,8 @@ Next: #004 - Add rate limiting to login
 - Optionally syncs completion to GitHub
 - Closes GitHub issue if linked
 - Updates labels/status
+
+### With compact-context
+- task-complete tidies epic.md (completed task details)
+- compact-context tidies progress.md (old session summaries)
+- Both archive to `.project/context/archive/`

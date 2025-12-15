@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-12-15
+
+### Added
+- **`compact-context` skill** - Archive old session summaries from progress.md
+  - Triggers on "compact context", "slim down progress", "archive old sessions"
+  - Moves sessions older than 7 days to `.project/context/archive/sessions/`
+  - Keeps progress.md slim and focused
+  - Preview mode available with `--preview` flag
+- **`project-reinit` skill** - Update existing projects with latest templates
+  - Auto-triggered from `project-init` when MindContext project detected
+  - Merges new CLAUDE.md template sections while preserving user content
+  - Creates missing directories (archive/)
+  - Direct trigger: "reinit project", "update templates", "refresh mindcontext"
+
+### Changed
+- **`project-init` skill** - Now handles both init and reinit
+  - Detects existing MindContext projects automatically
+  - Routes to reinit flow (template updates) or full init
+  - CLAUDE.md template now includes "Context Folder Rules" section
+  - Structure now shows archive/ directory
+- **`task-complete` skill** - Added epic.md tidying (Phase 5b)
+  - Archives completed task details when tasks complete
+  - Keeps epic.md focused on remaining work
+  - Archives to `.project/context/archive/epics/{epic}/`
+- **`end-of-day` skill** - Added context file health check (Phase 4b)
+  - Checks progress.md size (lines and session count)
+  - Suggests "compact context" when file grows large (>150 lines)
+- **Context folder structure** - Now includes archive/ subdirectory
+  - `context/archive/sessions/` - Monthly session archives
+  - `context/archive/epics/` - Completed task details per epic
+  - Documented in CLAUDE.md template
+
 ## [1.2.0] - 2025-12-10
 
 ### Added

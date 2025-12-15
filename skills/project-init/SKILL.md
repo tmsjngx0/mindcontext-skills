@@ -1,11 +1,11 @@
 ---
 name: project-init
-description: Initialize MindContext project with brainstorming-driven design. Creates .project/ structure, CLAUDE.md, and project design through conversational discovery. Use when user says "initialize project", "init project", "set up mindcontext", or "start new project".
+description: Initialize or reinitialize MindContext project. Creates .project/ structure for new projects, or updates templates for existing ones. Use when user says "initialize project", "init project", "reinit project", "update templates", or "refresh mindcontext".
 ---
 
 # Project Init
 
-Initialize any project with MindContext methodology through conversational discovery.
+Initialize any project with MindContext methodology, or update existing projects with latest templates.
 
 **Note:** For Shadow Engineering (parent + submodule pattern), use `shadow-setup` skill instead.
 
@@ -13,13 +13,28 @@ Initialize any project with MindContext methodology through conversational disco
 
 - Starting a new project (greenfield)
 - Adding MindContext to existing project (brownfield)
+- **Updating existing MindContext project with new templates (reinit)**
 - User says "initialize project", "init project", "project init", "set up mindcontext"
+- User says "reinit project", "update templates", "refresh mindcontext"
 - User says "quick init" or "init quick" → One-shot mode (no questions)
 
 ## Workflow Overview
 
 ```
 project-init
+    │
+    ├── 0. CHECK IF REINIT NEEDED
+    │      ↓
+    │   .project/ exists + CLAUDE.md exists?
+    │      ↓
+    │   ┌─────────────────────────────┐
+    │   │  YES → REINIT FLOW          │
+    │   │  Update templates only      │
+    │   │  Preserve user content      │
+    │   │  See "Reinit Flow" section  │
+    │   └─────────────────────────────┘
+    │      ↓
+    │   NO → Continue with init...
     │
     ├── 1. Check existing structure
     ├── 2. Detect project type (greenfield vs brownfield)
@@ -112,13 +127,141 @@ Continue with normal project initialization.
 
 ---
 
+## Phase 0b: Reinit Detection
+
+**Before any other phase, check if this is a reinit situation:**
+
+```bash
+# Check for existing MindContext
+if [ -d ".project" ] && [ -f "CLAUDE.md" ]; then
+    # This is an existing MindContext project → REINIT FLOW
+    echo "Existing MindContext project detected"
+fi
+```
+
+**If reinit detected:**
+```
+MINDCONTEXT PROJECT DETECTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This project already has MindContext initialized.
+
+Options:
+1. Update templates (sync with latest MindContext)
+2. Reinitialize completely (will preserve design.md)
+3. Cancel
+
+[Default: Update templates]
+```
+
+If user chooses "Update templates" → Go to **Reinit Flow** section below.
+If user chooses "Reinitialize" → Continue with normal init (preserve design.md).
+
+---
+
+## Reinit Flow (Template Updates)
+
+When updating an existing MindContext project with latest templates:
+
+### Step R1: Identify Updates Needed
+
+Compare current CLAUDE.md sections against latest template:
+
+```bash
+# Check for missing/outdated sections
+grep -q "## Context Folder Rules" CLAUDE.md || echo "MISSING"
+grep -q "archive/" CLAUDE.md || echo "OUTDATED"
+```
+
+**Template sections that may need updating:**
+- `## CRITICAL RULES`
+- `## MindContext Structure` (now includes archive/)
+- `## Context Folder Rules` (NEW)
+- `## Workflow - USE MINDCONTEXT SKILLS`
+- `## Shadow Engineering - File Locations`
+
+**User sections to preserve:**
+- `## Project Overview`
+- `## Project Design`
+- `## Testing`
+- `## Code Style`
+- Any custom sections
+
+### Step R2: Show Update Plan
+
+```
+TEMPLATE UPDATES AVAILABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CLAUDE.md:
+  [+] ADD: "Context Folder Rules" section
+  [~] UPDATE: "MindContext Structure" (archive/ folder)
+  [=] KEEP: Your custom sections preserved
+
+Directories:
+  [+] ADD: .project/context/archive/
+
+Apply updates? (y/n/preview)
+```
+
+### Step R3: Merge CLAUDE.md
+
+**Merge strategy:**
+1. Read existing CLAUDE.md into sections
+2. Identify user sections (preserve verbatim)
+3. Replace outdated template sections with latest
+4. Add missing template sections at correct location
+5. Write merged result
+
+**Section order after merge:**
+```markdown
+# CLAUDE.md
+## Project Overview          ← USER (preserve)
+## Project Design            ← USER (preserve)
+## CRITICAL RULES            ← TEMPLATE (update)
+## MindContext Structure     ← TEMPLATE (update)
+## Context Folder Rules      ← TEMPLATE (add)
+## Workflow                  ← TEMPLATE (update)
+## Shadow Engineering        ← TEMPLATE (if present)
+## Testing                   ← USER (preserve)
+## Code Style                ← USER (preserve)
+```
+
+### Step R4: Create Missing Directories
+
+```bash
+mkdir -p .project/context/archive/sessions
+mkdir -p .project/context/archive/epics
+```
+
+### Step R5: Confirm
+
+```
+REINIT COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Updated:
+  ✓ CLAUDE.md - Added "Context Folder Rules"
+  ✓ CLAUDE.md - Updated "MindContext Structure"
+  ✓ Created .project/context/archive/
+
+Preserved:
+  ✓ Project Overview
+  ✓ design.md
+  ✓ All your customizations
+
+Your project is now using latest MindContext templates.
+```
+
+---
+
 ## Phase 1: Setup (Steps 1-6)
 
 ### 1. Check Existing Structure
 
 ```
 Check for .project/ directory:
-  → Exists with design.md: "Already initialized. Update design?"
+  → Exists with CLAUDE.md: Route to REINIT FLOW (above)
   → Exists without design.md: "Structure exists. Add project design?"
   → Doesn't exist: Continue with full setup
 
@@ -263,11 +406,34 @@ For complex tasks (3+ files, new integrations), use feature-dev plugin:
 │   └── {topic}.md
 └── context/
     ├── progress.md              # Session progress
-    └── focus.json               # Current focus state
+    ├── focus.json               # Current focus state
+    └── archive/                 # Historical content (auto-created)
+        ├── sessions/            # Old session summaries
+        └── epics/               # Completed task details
 ```
 
 **IMPORTANT:** Tasks are `001.md`, `002.md` directly in epic folder.
 NOT `tasks/001-task-name.md` or any other format.
+
+## Context Folder Rules
+
+**The context/ folder should ONLY contain:**
+| File | Purpose |
+|------|---------|
+| `focus.json` | Current work focus (machine-readable) |
+| `progress.md` | Progress narrative (human-readable) |
+| `archive/` | Historical content (created by compact-context) |
+
+**DO NOT create additional files in context/**
+
+| Content Type | Save To | NOT |
+|--------------|---------|-----|
+| Research findings | `.project/spikes/{topic}.md` | `context/` |
+| Technical plans | `.project/plans/{name}.md` | `context/` |
+| Session notes | Append to `progress.md` | New file in context/ |
+| Architecture docs | `.project/plans/{name}.md` | `context/` |
+
+**Why:** context/ is for state tracking only. Clutter breaks automation.
 
 ## Workflow - USE MINDCONTEXT SKILLS
 **IMPORTANT:** Always use MindContext skills for project management. Do NOT improvise your own structure.
