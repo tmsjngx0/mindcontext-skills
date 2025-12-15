@@ -14,6 +14,7 @@ Initialize any project with MindContext methodology through conversational disco
 - Starting a new project (greenfield)
 - Adding MindContext to existing project (brownfield)
 - User says "initialize project", "init project", "project init", "set up mindcontext"
+- User says "quick init" or "init quick" → One-shot mode (no questions)
 
 ## Workflow Overview
 
@@ -360,40 +361,234 @@ Does this work, or do you have preferences?"
 
 Does this look right? Any adjustments?"
 
-### Brownfield Flow (5 questions - lighter)
+### Brownfield Flow (Auto-Generate + Ask Where to Start)
 
-**Opening:**
-"I've analyzed your codebase. Let me confirm a few things..."
+For existing projects, auto-generate context from codebase analysis, then ask user where to focus.
 
-**Q1: Purpose confirmation**
-"Based on [README/package.json], this project [detected purpose]. Is that accurate?"
-→ Confirm or correct
+**Step 1: Auto-Analyze Codebase**
 
-**Q2: Current state**
-"What's the current state?"
-- [ ] Active development
-- [ ] Maintenance mode
-- [ ] Needs refactoring
-- [ ] Starting new direction
+Gather information automatically (no questions):
 
-**Q3: Existing features**
-"What are the main features that already exist?"
-→ Open-ended
+```bash
+# Project purpose
+cat README.md 2>/dev/null | head -50
 
-**Q4: Planned features**
-"What features are you planning to add?"
-→ Open-ended (becomes roadmap)
+# Tech stack
+cat package.json 2>/dev/null | head -30
+cat pyproject.toml 2>/dev/null | head -30
+cat Cargo.toml 2>/dev/null | head -30
+cat go.mod 2>/dev/null | head -20
 
-**Q5: Tech debt/constraints**
-"Any technical debt or constraints?"
-- [ ] Legacy code needs refactoring
-- [ ] Missing tests
-- [ ] Performance issues
-- [ ] Dependency updates needed
-- [ ] None significant
+# Directory structure
+find . -type d -not -path '*/\.*' -not -path '*/node_modules/*' -not -path '*/__pycache__/*' -maxdepth 3 2>/dev/null
 
-**Wrap-up:**
-"Here's the design I've created. Look right?"
+# Git history for progress
+git log --oneline -20 2>/dev/null
+git branch -a 2>/dev/null
+git status --short 2>/dev/null
+```
+
+**Step 2: Auto-Generate progress.md**
+
+Create `.project/context/progress.md` from git history:
+
+```markdown
+# Project Progress
+
+**Last Updated:** [current timestamp]
+**Current Branch:** [from git branch --show-current]
+
+---
+
+## Recent Activity
+
+[Extract from git log --oneline -10, grouped by date if possible]
+
+### Recent Commits
+- [commit 1 summary]
+- [commit 2 summary]
+- [commit 3 summary]
+
+### Active Branches
+[List from git branch -a, highlight current]
+
+---
+
+## Working State
+
+[From git status]
+- Modified files: [count]
+- Untracked files: [count]
+- Staged changes: [yes/no]
+
+---
+
+## Next Steps
+
+1. [To be determined - ask user]
+
+---
+
+## Session Notes
+
+*Project initialized with MindContext on [date]*
+```
+
+**Step 3: Auto-Generate design.md**
+
+Create `.project/design.md` from README + config files:
+
+```markdown
+---
+name: [from package.json name or directory name]
+type: brownfield
+created: [timestamp]
+analyzed_from: [list of files read]
+---
+
+# Project Design: [Project Name]
+
+## Vision
+
+[Extract from README.md - first paragraph or description]
+
+## Technical Stack
+
+### Detected Stack
+| Component | Value | Source |
+|-----------|-------|--------|
+| Language | [detected] | [file] |
+| Framework | [detected] | [file] |
+| Package Manager | [npm/pip/cargo/etc] | [file] |
+| Test Framework | [detected or "Unknown"] | [file] |
+
+### Dependencies (Key)
+[List top 5-10 dependencies from package.json/requirements.txt/etc]
+
+## Project Structure
+
+```
+[Directory tree from analysis]
+```
+
+### Key Directories
+| Directory | Purpose |
+|-----------|---------|
+| [src/] | [inferred purpose] |
+| [tests/] | [inferred purpose] |
+| ... | ... |
+
+## Existing Features
+
+[Extract from README if available, otherwise mark as "To be documented"]
+
+## Feature Roadmap
+
+### Current State
+- [Existing features - to be confirmed with user]
+
+### Planned
+- [To be determined - ask user]
+
+## Out of Scope
+
+[To be determined]
+
+## Notes
+
+*This design was auto-generated from codebase analysis. Review and update as needed.*
+```
+
+**Step 4: Initialize focus.json (Empty)**
+
+Create `.project/context/focus.json` with no focus set:
+
+```json
+{
+  "current_focus": null,
+  "key_decisions": {},
+  "next_session_tasks": [],
+  "last_updated": "[timestamp]"
+}
+```
+
+**Step 5: Show Summary and Ask Where to Start**
+
+```
+BROWNFIELD PROJECT ANALYZED
+
+📁 Project: [name]
+📍 Location: [path]
+
+📊 Auto-Generated Context:
+  ✅ .project/context/progress.md  (from git history)
+  ✅ .project/design.md            (from README + config)
+  ✅ .project/context/focus.json   (empty - needs your input)
+
+🔍 Detected:
+  • Language: [detected]
+  • Framework: [detected]
+  • Recent commits: [count]
+  • Active branches: [list]
+
+📝 Review the generated files - I may have missed things.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHERE WOULD YOU LIKE TO START?
+
+1. 🐛 Fix a bug
+2. ✨ Add a new feature
+3. 🔧 Refactor/improve existing code
+4. 📚 Just exploring - no focus yet
+5. 📋 Other (describe)
+
+[User selects]
+```
+
+**Step 6: Set Focus Based on Answer**
+
+Based on user's choice:
+
+| Choice | Action |
+|--------|--------|
+| Fix a bug | Ask "Which bug?" → Create focus with type "bugfix" |
+| Add feature | Ask "What feature?" → Suggest starting PRD flow |
+| Refactor | Ask "What area?" → Create focus with type "refactor" |
+| Exploring | Leave focus.json empty, suggest "prime-context" next time |
+| Other | Ask for details → Set appropriate focus |
+
+**Example for "Add a new feature":**
+```
+"What feature would you like to add?"
+
+[User describes]
+
+"Got it. Would you like to:
+1. Create a PRD for this feature (recommended)
+2. Jump straight to implementation
+3. Just note it for later"
+```
+
+If PRD selected → trigger `prd-create` skill with context.
+
+**Step 7: Final Summary**
+
+```
+PROJECT INITIALIZED: [project-name]
+
+Created:
+  ✅ .project/design.md           ← Auto-generated from codebase
+  ✅ .project/context/progress.md ← Auto-generated from git
+  ✅ .project/context/focus.json  ← Set to: [focus or "none"]
+  ✅ .project/config.json
+  ✅ CLAUDE.md
+  ✅ .gitattributes
+
+Current Focus: [description or "None - exploring"]
+
+Next: [appropriate next step based on focus]
+```
 
 ---
 

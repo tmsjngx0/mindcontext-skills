@@ -39,39 +39,46 @@ To establish project context:
 Continuing with available files...
 ```
 
-### 2. Load Context Files (Priority Order)
+### 2. Load Context Files
 
-**Priority 1 - Essential Context (load first):**
-1. `project-overview.md` - High-level understanding
-2. `project-brief.md` - Core purpose and goals
-3. `tech-context.md` - Technical stack and dependencies
+MindContext uses **3 core files** for project context:
 
-**Priority 2 - Current State (load second):**
-4. `progress.md` - Current status and recent work
-5. `project-structure.md` - Directory and file organization
+| File | Purpose | Required |
+|------|---------|----------|
+| `.project/context/focus.json` | Current work state (machine-readable) | Yes |
+| `.project/context/progress.md` | Session narrative, recent work | Yes |
+| `.project/design.md` | Project vision, tech stack, roadmap | Yes |
 
-**Priority 3 - Deep Context (load third):**
-6. `system-patterns.md` - Architecture and design patterns
-7. `product-context.md` - User needs and requirements
-8. `project-style-guide.md` - Coding conventions
+**Load in this order:**
+
+1. **`focus.json`** - What are we working on right now?
+2. **`progress.md`** - What happened recently? What's next?
+3. **`design.md`** - What is this project? How is it built?
 
 ### 3. Fallback Sources
 
-If context files are missing, extract from:
-- `README.md` - Project overview
-- `package.json` / `pyproject.toml` / `Cargo.toml` - Tech stack
-- Recent git commits - Current progress
-- Directory structure - Project organization
+If the 3 core files are missing, fall back to:
+
+| Missing File | Fallback Source |
+|--------------|-----------------|
+| `design.md` | `README.md` + `package.json`/`pyproject.toml` |
+| `progress.md` | `git log --oneline -10` |
+| `focus.json` | Assume no active focus |
 
 ```bash
-# Check for README
+# Check for fallback sources
 test -f README.md && echo "README.md available"
+ls package.json pyproject.toml Cargo.toml go.mod 2>/dev/null
+git log --oneline -10 2>/dev/null
+```
 
-# Check for config files
-ls package.json pyproject.toml Cargo.toml pom.xml build.gradle *.csproj 2>/dev/null
+**If no context exists at all:**
+```
+⚠️ No MindContext files found.
 
-# Recent commits
-git log --oneline -10
+Run "project init" to set up context for this project.
+
+Continuing with README.md and git history...
 ```
 
 ### 4. Git State Check
@@ -93,56 +100,52 @@ git status --short
 🧠 Context Primed Successfully
 
 📖 Loaded Context Files:
-  ✅ Essential: [X]/3 files
-  ✅ Current State: [X]/2 files
-  ✅ Deep Context: [X]/3 files
+  [✅|⚠️] focus.json    - [status: loaded | missing | empty]
+  [✅|⚠️] progress.md   - [status: loaded | missing | used fallback]
+  [✅|⚠️] design.md     - [status: loaded | missing | used fallback]
+
+🎯 Current Focus:
+  [From focus.json - or "No active focus" if null]
 
 🔍 Project Understanding:
   - Name: [project_name]
-  - Type: [project_type]
+  - Type: [greenfield|brownfield]
   - Language: [primary_language]
-  - Status: [current_status]
   - Branch: [git_branch]
 
-📊 Key Metrics:
-  - Last Updated: [date]
-  - Files Loaded: [count]
+📊 Recent Progress:
+  [2-3 bullet points from progress.md or git log]
 
 ⚠️ Warnings (if any):
   [list any missing files or issues]
 
-🎯 Ready State:
-  ✅ Project context loaded
-  ✅ Current status understood
-  ✅ Ready for development work
-
-💡 Project Summary:
-  [2-3 sentence summary of what the project is and current state]
+💡 Ready to work. Current focus: [focus summary or "none set"]
 ```
 
 ## Error Handling
 
 ### Missing Context Directory
 ```
-⚠️ No .project/context/ directory found
+⚠️ No .project/ directory found
 
-Falling back to:
-- README.md for project overview
-- Config files for tech stack
-- Git history for progress
+This project hasn't been initialized with MindContext.
 
-Recommendation: Create context files for better AI assistance
+Options:
+1. Run "project init" to set up MindContext
+2. Continue with README.md and git history (limited context)
+
+Falling back to available files...
 ```
 
 ### Partial Context
 ```
 ⚠️ Partial Context Loaded
 
-Loaded: [list of files]
-Missing: [list of missing files]
+Loaded: [list of files found]
+Missing: [list of files not found]
 
 Continuing with available context.
-Suggest running context update to fill gaps.
+Run "project init" to create missing files.
 ```
 
 ### No Context Available
@@ -154,80 +157,84 @@ Available information:
 - README: [yes/no]
 - Config files: [list]
 
-Please provide project context or create:
-  .project/context/project-overview.md
-  .project/context/tech-context.md
+To set up MindContext, run: "project init"
 ```
 
-## Context File Templates
+## Context File Reference
 
-### project-overview.md
-```markdown
----
-created: [date]
-last_updated: [date]
-version: 1.0
----
+MindContext uses exactly 3 context files:
 
-# Project Overview
-
-## What is this project?
-[Brief description]
-
-## Key Features
-- [Feature 1]
-- [Feature 2]
-
-## Architecture
-[High-level architecture description]
+### 1. focus.json
+```json
+{
+  "current_focus": {
+    "type": "epic|task|bugfix|refactor",
+    "name": "Description",
+    "epic": "epic-name",
+    "task": "001",
+    "started": "2025-01-01",
+    "phase": "implementation"
+  },
+  "key_decisions": {
+    "topic": "decision made"
+  },
+  "next_session_tasks": [
+    "Task 1",
+    "Task 2"
+  ],
+  "last_updated": "2025-01-01T12:00:00Z"
+}
 ```
 
-### tech-context.md
+### 2. progress.md
 ```markdown
----
-created: [date]
-last_updated: [date]
----
+# Project Progress
 
-# Technical Context
+**Last Updated:** [date]
+**Current Branch:** [branch]
 
-## Tech Stack
-- Language: [language]
-- Framework: [framework]
-- Database: [database]
+## Current Focus
+[What we're working on]
 
-## Dependencies
-[Key dependencies and why they're used]
-
-## Build & Run
-[How to build and run the project]
-```
-
-### progress.md
-```markdown
----
-created: [date]
-last_updated: [date]
----
-
-# Progress
-
-## Current Status
-[What's currently being worked on]
-
-## Recent Completions
+## Recent Activity
 - [Recent work 1]
 - [Recent work 2]
 
 ## Next Steps
-- [Planned work 1]
-- [Planned work 2]
+1. [Step 1]
+2. [Step 2]
+
+## Session Notes
+[Any important notes]
+```
+
+### 3. design.md
+```markdown
+---
+name: project-name
+type: greenfield|brownfield
+created: [date]
+---
+
+# Project Design: [Name]
+
+## Vision
+[What this project does]
+
+## Technical Stack
+- Language: [language]
+- Framework: [framework]
+
+## Feature Roadmap
+[Features planned]
+
+## Out of Scope
+[What we're not building]
 ```
 
 ## Notes
 
-- Load files in priority order for optimal understanding
-- Handle missing files gracefully - don't fail completely
-- Provide clear summary of what was loaded
+- Load all 3 files in order: focus.json → progress.md → design.md
+- Handle missing files gracefully - fall back to README/git
 - Always check git state for current branch context
-- Fallback to standard files if context directory missing
+- If no context exists, suggest running "project init"
