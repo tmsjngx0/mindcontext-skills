@@ -139,7 +139,7 @@ if [ -d ".project" ] && [ -f "CLAUDE.md" ]; then
 fi
 ```
 
-**If reinit detected:**
+**If reinit detected, show options:**
 ```
 MINDCONTEXT PROJECT DETECTED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -147,40 +147,51 @@ MINDCONTEXT PROJECT DETECTED
 This project already has MindContext initialized.
 
 Options:
-1. Update templates (sync with latest MindContext)
+1. Update templates (sync with latest MindContext) [Default]
 2. Reinitialize completely (will preserve design.md)
 3. Cancel
-
-[Default: Update templates]
 ```
 
-If user chooses "Update templates" → Go to **Reinit Flow** section below.
-If user chooses "Reinitialize" → Continue with normal init (preserve design.md).
+**Routing:**
+- **Option 1 (Update templates)** → Execute **Reinit Flow** below, then EXIT. No discovery questions.
+- **Option 2 (Reinitialize)** → Continue to Phase 1 (preserves design.md but re-runs setup)
+- **Option 3 (Cancel)** → EXIT
 
 ---
 
 ## Reinit Flow (Template Updates)
 
+**IMPORTANT:** This is a complete, self-contained flow. When reinit is detected, execute ONLY these steps, then EXIT. Do NOT continue to Phase 1 or any other phases.
+
 When updating an existing MindContext project with latest templates:
 
-### Step R1: Identify Updates Needed
+### Step R1: Auto-Scan for Updates (No Questions)
 
-Compare current CLAUDE.md sections against latest template:
+Automatically scan the repo to identify what needs updating:
 
 ```bash
-# Check for missing/outdated sections
-grep -q "## Context Folder Rules" CLAUDE.md || echo "MISSING"
-grep -q "archive/" CLAUDE.md || echo "OUTDATED"
+# Auto-detect missing/outdated sections - NO user questions
+echo "Scanning project for template updates..."
+
+# Check CLAUDE.md sections
+grep -q "## Context Folder Rules" CLAUDE.md || echo "MISSING: Context Folder Rules"
+grep -q "archive/" CLAUDE.md || echo "OUTDATED: MindContext Structure"
+grep -q "## CRITICAL RULES" CLAUDE.md || echo "MISSING: CRITICAL RULES"
+
+# Check directories
+test -d ".project/context/archive" || echo "MISSING: archive directory"
+test -d ".project/plans" || echo "MISSING: plans directory"
+test -d ".project/spikes" || echo "MISSING: spikes directory"
 ```
 
-**Template sections that may need updating:**
+**Template sections to check:**
 - `## CRITICAL RULES`
 - `## MindContext Structure` (now includes archive/)
 - `## Context Folder Rules` (NEW)
 - `## Workflow - USE MINDCONTEXT SKILLS`
 - `## Shadow Engineering - File Locations`
 
-**User sections to preserve:**
+**User sections to preserve (never modify):**
 - `## Project Overview`
 - `## Project Design`
 - `## Testing`
@@ -203,6 +214,16 @@ Directories:
 
 Apply updates? (y/n/preview)
 ```
+
+If nothing needs updating:
+```
+PROJECT UP TO DATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your project already has the latest MindContext templates.
+No changes needed.
+```
+→ EXIT (done)
 
 ### Step R3: Merge CLAUDE.md
 
@@ -232,9 +253,11 @@ Apply updates? (y/n/preview)
 ```bash
 mkdir -p .project/context/archive/sessions
 mkdir -p .project/context/archive/epics
+mkdir -p .project/plans
+mkdir -p .project/spikes
 ```
 
-### Step R5: Confirm
+### Step R5: Confirm and EXIT
 
 ```
 REINIT COMPLETE
@@ -253,15 +276,19 @@ Preserved:
 Your project is now using latest MindContext templates.
 ```
 
+**⛔ STOP HERE - Reinit flow is complete. Do NOT continue to Phase 1 or ask discovery questions.**
+
 ---
 
 ## Phase 1: Setup (Steps 1-6)
+
+**Note:** Phase 1+ only runs for NEW projects. If reinit was detected above, these phases are skipped.
 
 ### 1. Check Existing Structure
 
 ```
 Check for .project/ directory:
-  → Exists with CLAUDE.md: Route to REINIT FLOW (above)
+  → Exists with CLAUDE.md: Execute REINIT FLOW above and EXIT
   → Exists without design.md: "Structure exists. Add project design?"
   → Doesn't exist: Continue with full setup
 
