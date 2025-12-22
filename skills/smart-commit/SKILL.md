@@ -1,11 +1,83 @@
 ---
 name: smart-commit
-description: Intelligent git commit that detects change types (management, PRD, submodule, worktree) and commits appropriately. Use when user says "commit", "smart commit", "commit changes", or "save work".
+description: Intelligent git commit using Conventional Commits format. Detects change types, creates granular commits, and auto-detects breaking changes. Use when user says "commit", "smart commit", "commit changes", or "save work".
 ---
 
 # Smart Commit
 
-Intelligently detect and commit changes across different repository areas with appropriate commit messages and workflows.
+Intelligently detect and commit changes using **[Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)** format with granular, focused commits.
+
+## Conventional Commits Format
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Commit Types
+
+| Type | Description | SemVer Impact |
+|------|-------------|---------------|
+| `feat` | New feature or capability | MINOR |
+| `fix` | Bug fix | PATCH |
+| `docs` | Documentation only | - |
+| `style` | Formatting, whitespace (no code change) | - |
+| `refactor` | Code restructuring (no feature/fix) | - |
+| `perf` | Performance improvement | - |
+| `test` | Adding/updating tests | - |
+| `build` | Build system, dependencies | - |
+| `ci` | CI/CD configuration | - |
+| `chore` | Maintenance tasks | - |
+| `revert` | Reverting a previous commit | - |
+
+### Scopes (Recommended)
+
+Scopes add context. Common scopes for this project:
+
+```
+feat(skills): add new workflow skill
+fix(hooks): handle missing focus.json
+docs(readme): update installation guide
+refactor(auth): extract token validation
+chore(deps): update dependencies
+test(api): add endpoint tests
+```
+
+### Breaking Changes
+
+Signal breaking changes with `!` or footer:
+
+```
+feat!: remove deprecated skill API
+
+feat(api)!: change response format to JSON
+
+feat: update authentication flow
+
+BREAKING CHANGE: Skills now require explicit registration
+```
+
+## Granular Commit Philosophy
+
+**Make small, focused commits.** Each commit should:
+- Address ONE logical change
+- Be independently understandable
+- Be independently revertable
+
+**Instead of:**
+```
+feat: add user authentication with tests and docs
+```
+
+**Prefer:**
+```
+feat(auth): add login endpoint
+test(auth): add login endpoint tests
+docs(auth): add authentication guide
+```
 
 ## When to Use
 
@@ -16,17 +88,19 @@ Intelligently detect and commit changes across different repository areas with a
 
 ## Change Categories
 
-The skill detects and handles these change types:
+The skill detects and maps changes to appropriate types:
 
-| Category | Location | Commit Strategy |
-|----------|----------|-----------------|
-| **Submodule** | `mindcontext-skills/` or other submodules | Commit in submodule first, then update parent reference |
-| **PRD/Epic** | `.project/prds/`, `.project/epics/` | Group related PM changes |
-| **Context** | `.project/context/` | Commit as documentation update |
-| **Management** | `docs/`, `scripts/` | Commit as chore/docs |
-| **Config** | `.claude/`, `CLAUDE.md` | Commit as config update |
-| **Worktree** | Separate worktree paths | Commit in worktree context |
-| **Code** | `src/`, `lib/`, etc. | Standard feature/fix commits |
+| Category | Location | Type Mapping |
+|----------|----------|--------------|
+| **Submodule** | `mindcontext-skills/` or submodules | `feat`/`fix`/`refactor` by content |
+| **PRD/Epic** | `.project/prds/`, `.project/epics/` | `docs(prd):` or `docs(epic):` |
+| **Context** | `.project/context/` | `docs(context):` |
+| **Management** | `docs/`, `scripts/` | `docs:` or `chore(scripts):` |
+| **Config** | `.claude/`, `CLAUDE.md` | `chore(config):` |
+| **Worktree** | Separate worktree paths | Determined by content |
+| **Code** | `src/`, `lib/`, etc. | `feat`/`fix`/`refactor`/`test`/`perf` |
+| **Tests** | `test/`, `tests/`, `*.test.*` | `test:` or `test(scope):` |
+| **Dependencies** | `package.json`, `requirements.txt` | `build(deps):` or `chore(deps):` |
 
 ## Workflow
 
@@ -146,6 +220,50 @@ Worktree Changes:
     M  src/feature.ts
 ```
 
+### Phase 1.5: Breaking Change Detection
+
+**Auto-detect potential breaking changes before committing.**
+
+**Step 1.5.1: Analyze Staged Changes**
+
+```bash
+# Check for deleted exports
+git diff --staged | grep -E "^-export (function|const|class)"
+
+# Check for changed function signatures
+git diff --staged | grep -E "^[-+](async )?(function|const) \w+\s*\("
+
+# Check for major dependency bumps
+git diff --staged package.json | grep '"version"'
+
+# Check for removed config options
+git diff --staged | grep -E "^-\s+[\"']?\w+[\"']?\s*:"
+```
+
+**Step 1.5.2: Breaking Change Patterns**
+
+| Pattern | Detection | Confidence |
+|---------|-----------|------------|
+| Deleted exports | `-export function/const/class` | High |
+| Changed signatures | Parameter changes in functions | Medium |
+| Major dep bump | `package.json` version X.0.0 | Medium |
+| Removed config | Deleted keys in config files | High |
+| Deleted routes | Removed API endpoints | High |
+
+**Step 1.5.3: Prompt if Detected**
+
+```
+⚠️ Potential breaking change detected:
+  - Removed: export function authenticate()
+  - Changed: login(user) → login(user, options)
+
+Add breaking change indicator? (y/n)
+```
+
+If user confirms, add `!` to type or `BREAKING CHANGE:` footer.
+
+---
+
 ### Phase 2: Commit Strategy
 
 **Step 2.1: Determine Commit Order**
@@ -158,44 +276,73 @@ Always commit in this order:
 
 **Step 2.2: Generate Commit Messages**
 
-Follow CLAUDE.md guidelines:
+Follow Conventional Commits format:
 - NO AI attribution footers
-- Clean, professional messages
+- Use appropriate type and scope
+- Keep first line under 72 characters (warn if longer)
 - Describe the change accurately
 
-**Message Templates:**
+**Step 2.3: Message Length Validation**
 
 ```
-# Submodule (skills/agents)
-feat: Add {skill-name} skill
-feat: Add {agent-name} agent
-fix: {description} in {skill/agent}
-docs: Update {skill} documentation
+⚠️ Commit message first line is 85 characters (recommended: ≤72)
+  "feat(authentication): add comprehensive user login with OAuth2 support"
+
+Shorten? (y/n)
+```
+
+**Message Templates (Conventional Commits):**
+
+```
+# Skills/Agents (in submodule)
+feat(skills): add {skill-name} skill
+feat(agents): add {agent-name} agent
+fix(skills): {description} in {skill-name}
+docs(skills): update {skill} documentation
+refactor(skills): restructure {skill-name}
 
 # PRD/Epic
-docs: Add PRD for {feature}
-docs: Create epic for {feature}
-docs: Update {feature} requirements
+docs(prd): add {feature} requirements
+docs(epic): create {feature} architecture
+docs(epic): update {feature} tasks
 
 # Context
-docs: Update project progress
-docs: Add technical context
+docs(context): update project progress
+docs(context): capture session state
 
 # Management
-chore: Update development docs
-chore: Reorganize project structure
+docs: update development documentation
+chore(scripts): {description}
 
 # Config
-chore: Update Claude configuration
-chore: Update project settings
+chore(config): update Claude configuration
+chore(config): update project settings
 
 # Submodule reference
-chore: Update {submodule-name} submodule
+chore(submodule): update {submodule-name}
 
 # Code
-feat: {description}
-fix: {description}
-refactor: {description}
+feat({scope}): {description}
+fix({scope}): {description}
+refactor({scope}): {description}
+perf({scope}): {description}
+test({scope}): {description}
+
+# Dependencies
+build(deps): add {package}
+build(deps): update {package} to {version}
+chore(deps): remove unused {package}
+
+# CI/CD
+ci: add GitHub Actions workflow
+ci: update deployment config
+
+# Breaking Changes
+feat({scope})!: {description}
+# or with footer:
+feat({scope}): {description}
+
+BREAKING CHANGE: {explanation}
 ```
 
 ### Phase 3: Execute Commits
@@ -224,7 +371,7 @@ cd ..
 git add mindcontext-skills
 
 # Commit reference update
-git commit -m "chore: Update mindcontext-skills submodule"
+git commit -m "chore(submodule): update mindcontext-skills"
 ```
 
 **Step 3.3: Commit Worktree Changes**
@@ -240,24 +387,32 @@ cd ../..
 
 **Step 3.4: Commit Parent Changes**
 
-Group related changes:
+Group related changes (granular commits by type):
 
 ```bash
-# Group 1: PRD/Epic changes
-git add .project/prds/ .project/epics/
-git commit -m "docs: {PRD/Epic description}"
+# Group 1: PRD changes
+git add .project/prds/
+git commit -m "docs(prd): {feature} requirements"
 
-# Group 2: Context changes
+# Group 2: Epic changes
+git add .project/epics/
+git commit -m "docs(epic): {feature} architecture"
+
+# Group 3: Context changes
 git add .project/context/
-git commit -m "docs: Update project context"
+git commit -m "docs(context): update project progress"
 
-# Group 3: Management changes
-git add docs/ scripts/
-git commit -m "chore: {description}"
+# Group 4: Management changes
+git add docs/
+git commit -m "docs: update development documentation"
 
-# Group 4: Config changes
+# Group 5: Config changes
 git add CLAUDE.md .claude/
-git commit -m "chore: Update configuration"
+git commit -m "chore(config): update project configuration"
+
+# Group 6: Scripts
+git add scripts/
+git commit -m "chore(scripts): {description}"
 ```
 
 **Step 3.5: Push Parent**
@@ -275,12 +430,12 @@ SMART COMMIT COMPLETE
 =====================
 
 Submodule: mindcontext-skills
-  ✓ abc1234 feat: Add smart-commit skill
+  ✓ abc1234 feat(skills): add smart-commit skill
   ✓ Pushed to origin/main
 
-Parent: mindcontext-mcp
-  ✓ def5678 chore: Update mindcontext-skills submodule
-  ✓ ghi9012 docs: Update project progress
+Parent: flowforge-mcp
+  ✓ def5678 chore(submodule): update mindcontext-skills
+  ✓ ghi9012 docs(context): update project progress
   ✓ Pushed to origin/main
 
 Worktrees: None
@@ -386,11 +541,12 @@ To see conflicts: git diff --name-only --diff-filter=U
 Respects CLAUDE.md settings:
 
 ```markdown
-## Git Commits - NO AI Attribution
+## Git Commits - Conventional Commits + NO AI Attribution
+- Use Conventional Commits format: type(scope): description
 - Do NOT include AI-generated footers in commit messages
 - No "Generated with Claude Code" or "Co-Authored-By: Claude"
-- Keep commit messages clean and professional
-- Just describe the change, nothing else
+- Keep first line under 72 characters
+- Make granular commits (one logical change per commit)
 ```
 
 ## Examples
@@ -399,9 +555,10 @@ Respects CLAUDE.md settings:
 ```
 User: "commit"
 → Analyzes all changes
-→ Commits submodule if changed
-→ Updates parent reference
-→ Commits parent changes by category
+→ Detects breaking changes (prompts if found)
+→ Commits submodule: "feat(skills): add workflow-status skill"
+→ Updates parent: "chore(submodule): update mindcontext-skills"
+→ Commits context: "docs(context): update project progress"
 → Pushes all
 ```
 
@@ -409,8 +566,8 @@ User: "commit"
 ```
 User: "commit the new skill I just created"
 → Detects new skill in mindcontext-skills
-→ Commits: "feat: Add {skill-name} skill"
-→ Updates parent submodule reference
+→ Commits: "feat(skills): add {skill-name} skill"
+→ Updates parent: "chore(submodule): update mindcontext-skills"
 → Pushes both
 ```
 
@@ -418,16 +575,30 @@ User: "commit the new skill I just created"
 ```
 User: "save my work"
 → Full analysis of all changes
-→ Groups commits logically
+→ Groups by type (granular commits)
+→ Warns if message > 72 chars
 → Pushes everything
 → Reports summary
+```
+
+**Breaking change detected:**
+```
+User: "commit"
+→ Analyzes changes, detects deleted export
+→ Prompts: "Breaking change detected. Add indicator? (y/n)"
+→ User confirms
+→ Commits: "feat(api)!: remove deprecated authenticate function"
+→ Pushes
 ```
 
 ## Notes
 
 - Always commit submodules before parent
 - Never include AI attribution in commits
-- Group related changes when possible
+- Use Conventional Commits format for all messages
+- Make granular commits (one logical change each)
+- Warn if first line exceeds 72 characters
+- Auto-detect and prompt for breaking changes
 - Push after committing (unless user says otherwise)
 - Handle worktrees independently
 - Warn about uncommitted nested changes

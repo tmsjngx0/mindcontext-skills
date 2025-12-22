@@ -1,17 +1,18 @@
 ---
-description: Smart commit - intelligently detect and commit changes across submodules and parent repo
+description: Smart commit using Conventional Commits format - detects changes, auto-detects breaking changes, creates granular commits
 ---
 
 # Smart Commit
 
-Intelligently analyze and commit changes across your repository structure.
+Intelligently analyze and commit changes using **Conventional Commits** format.
 
 This will:
-1. Detect changes in submodules, worktrees, PRDs, context files, and management docs
-2. Categorize changes by type
-3. Create appropriate commit messages following project conventions
-4. Commit in the correct order (submodules first, then parent)
-5. Push changes
+1. Detect changes in submodules, worktrees, PRDs, context files, and code
+2. Auto-detect potential breaking changes
+3. Create granular commits with proper type(scope): format
+4. Warn if commit message exceeds 72 characters
+5. Commit in the correct order (submodules first, then parent)
+6. Push changes
 
 ## Usage
 
