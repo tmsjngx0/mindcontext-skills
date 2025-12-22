@@ -207,13 +207,28 @@ See `.project/design.md` for full project vision and feature roadmap.
 
 ## CRITICAL RULES
 
-### Git Commits - NO AI ATTRIBUTION
-**IMPORTANT:** Never add AI-generated footers to git commit messages:
-- NO "Generated with Claude Code" footer
-- NO "Co-Authored-By: Claude" or similar
-- NO AI attribution of any kind
-- Keep commit messages clean, professional, human-authored style
-- Just describe the change, nothing else
+### Git Commits - Conventional Commits + NO AI ATTRIBUTION
+Use [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+<type>[optional scope]: <description>
+```
+
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+
+**Examples:**
+```
+feat(auth): add login endpoint
+fix(api): handle null response
+docs(readme): update installation guide
+chore(deps): update dependencies
+```
+
+**Rules:**
+- Use appropriate type and scope
+- Keep first line under 72 characters
+- Make granular commits (one logical change per commit)
+- NO AI attribution (no "Generated with Claude Code", no "Co-Authored-By: Claude")
 
 ### File Organization - Use .project/ Structure
 All project management files go in `.project/`:
@@ -289,6 +304,12 @@ NOT `tasks/001-task-name.md` or any other format.
 - Use `001-task-name.md` naming
 - Improvise project management structures
 - Skip the PRD → Epic → Tasks flow
+
+### Workflow Enforcement
+Before implementing multi-file changes:
+1. Create a plan in `.project/plans/` first
+2. Follow: PRD → Epic → Tasks for new features
+3. Say "just do it" to bypass for quick fixes
 
 ## Testing
 [Detect or ask: pytest, jest, cargo test, etc.]
