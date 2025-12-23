@@ -88,7 +88,7 @@ Auto-commit context files if changed:
 git add .project/context/*.md
 
 # Commit if changes
-git diff --cached --quiet || git commit -m "Update context at end of day"
+git diff --cached --quiet || git commit -m "docs(context): update end of day state"
 ```
 
 ### Phase 5: Final Summary

@@ -117,7 +117,7 @@ echo "# My Project" > README.md
 
 # Initial commit
 git add .
-git commit -m "Initial commit"
+git commit -m "chore: initial commit"
 
 # Add remote (GitHub/GitLab)
 git remote add origin https://github.com/user/my-project.git
@@ -128,7 +128,7 @@ cd ..
 
 # Add as submodule
 git submodule add https://github.com/user/my-project.git my-project
-git commit -m "Add my-project submodule"
+git commit -m "chore(submodule): add my-project"
 ```
 
 **Step 1.4: Configure Parent**
@@ -196,13 +196,13 @@ cd my-project
 
 # 4. Commit to submodule (clean messages)
 git add .
-git commit -m "feat: Add user authentication"
+git commit -m "feat(auth): add user authentication"
 git push
 
 # 5. Update parent submodule reference
 cd ..
 git add my-project
-git commit -m "chore: Update my-project submodule"
+git commit -m "chore(submodule): update my-project"
 git push
 ```
 
@@ -230,7 +230,7 @@ cd my-project
 git pull origin main
 cd ..
 git add my-project
-git commit -m "chore: Update submodule to latest"
+git commit -m "chore(submodule): update to latest"
 ```
 
 **Working on Feature:**
@@ -247,7 +247,7 @@ cd ..
 # Commit in submodule
 cd my-project
 git add .
-git commit -m "feat: Implement OAuth integration"
+git commit -m "feat(auth): implement OAuth integration"
 git push origin feature/new-auth
 
 # Create PR from submodule branch
@@ -293,13 +293,13 @@ mv my-project/CLAUDE.md ./
 # 5. Clean up submodule
 cd my-project
 git rm .claude/ CLAUDE.md
-git commit -m "Remove AI context (moved to parent)"
+git commit -m "chore: remove AI context (moved to parent)"
 git push
 
 # 6. Update parent
 cd ..
 git add .
-git commit -m "Initialize shadow engineering structure"
+git commit -m "chore: initialize shadow engineering structure"
 git push
 ```
 
@@ -462,7 +462,7 @@ git push
 # Update parent
 cd ..
 git add my-project
-git commit -m "chore: Update my-project submodule"
+git commit -m "chore(submodule): update my-project"
 git push
 
 echo "✅ Clean commit pushed to submodule"
