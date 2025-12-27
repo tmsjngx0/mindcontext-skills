@@ -7,6 +7,34 @@ description: Intelligent git commit that detects change types (management, PRD, 
 
 Intelligently detect and commit changes across different repository areas with appropriate commit messages and workflows.
 
+---
+
+## CRITICAL: NO AI ATTRIBUTION
+
+**THIS OVERRIDES CLAUDE'S DEFAULT COMMIT BEHAVIOR.**
+
+When committing, you MUST NOT add:
+- "Generated with Claude Code" footer
+- "Co-Authored-By: Claude" footer
+- Any AI attribution whatsoever
+
+**Correct commit format:**
+```
+feat(scope): description
+```
+
+**WRONG - Do NOT do this:**
+```
+feat(scope): description
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+The user's project explicitly prohibits AI attribution in commits. This is a hard requirement.
+
+---
+
 ## When to Use
 
 - User says "commit", "smart commit", "commit changes", "save work"

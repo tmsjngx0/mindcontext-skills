@@ -293,8 +293,21 @@ Check for .project/ directory:
   → Doesn't exist: Continue with full setup
 
 Check for git:
-  → Not a repo: "Initialize git repository? (recommended)"
+  → Not a repo: Initialize git automatically (greenfield projects need git)
 ```
+
+**CRITICAL: For greenfield projects, ALWAYS initialize git:**
+
+```bash
+# Check if already a git repo
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  # Initialize git repository
+  git init
+  echo "✓ Initialized git repository"
+fi
+```
+
+This is essential - without git, commits, worktrees, and submodules won't work.
 
 ### 2. Detect Project Type
 
